@@ -28,7 +28,7 @@ export default function PrankCardsPage() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             loading="lazy" 
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/3dc86cd336071bec754317e8c8f65017b291ae55f3b85e76df6232eb398994b3"
+            src="/end.png"
             alt="Footer decoration"
             className="w-full h-auto mt-6 object-cover"
           />

@@ -7,7 +7,7 @@ export const consolas = localFont({
 })
 
 export const almarenaNeue = localFont({
-  src: './public/fonts/AlmarenaNeue-Bold.otf',
+  src: './public/fonts/AlmarenaNeue-Bold.ttf',
   variable: '--font-almarena',
   display: 'swap',
 })
