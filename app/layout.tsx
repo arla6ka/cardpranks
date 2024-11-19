@@ -4,7 +4,7 @@ import { consolas, almarenaNeue } from './fonts'
 
 
 export const metadata: Metadata = {
-  title: "PrankCards - Anonymous Christmas Cards",
+  title: "CardPranks - Anonymous Christmas Cards",
   description: "Send anonymous prank Christmas cards to your friends and family",
 };
 
