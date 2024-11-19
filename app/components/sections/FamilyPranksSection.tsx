@@ -10,7 +10,7 @@ export const FamilyPranksSection = ({ title, imageUrl }: FamilyPranksSectionProp
       className="flex flex-col items-center mt-20 w-full text-center max-md:mt-10"
     >
       <h2 className="mx-auto font-['Almarena_Neue'] text-4xl md:text-6xl leading-[80px] max-md:text-4xl max-md:leading-10">
-        See How Other<br/>  Families Got Pranked
+        {title}
       </h2>
       <video 
         autoPlay 
