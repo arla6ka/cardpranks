@@ -21,3 +21,13 @@ body {
     font-family: 'Consolas', monospace;
   }
 }
+/* globals.css */
+@font-face {
+  font-family: 'Almarena Neue';
+  src: url('/fonts/AlmarenaNeue-Bold.woff2') format('woff2'),
+       url('/fonts/AlmarenaNeue-Bold.woff') format('woff'),
+       url('/fonts/AlmarenaNeue-Bold.ttf') format('truetype');
+  font-weight: normal;  /* Change from bold to normal */
+  font-style: normal;
+  font-display: swap;
+}
