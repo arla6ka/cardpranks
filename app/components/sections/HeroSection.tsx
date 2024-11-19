@@ -23,7 +23,7 @@ export const HeroSection = () => {
           className="object-contain self-center mb-6 md:mb-10 w-full md:w-[600px] max-w-[90%] aspect-[1.4]" 
         />
   
-  <h1 className="text-6xl leading-[80px] text-center font-['Almarena_Neue'] max-md:text-4xl max-md:leading-10">
+  <h1 className="text-6xl leading-[80px] text-center font-['Almarena_Neue'] max-md:text-4xl max-md:w-[350px] max-md:leading-10">
   Send a Fake Christmas Postcard <br /> They&apos;ll Never Forget.
 </h1>
         <p className="mt-3 md:mt-4 text-xl md:text-2xl leading-tight text-center px-4 md:px-0">

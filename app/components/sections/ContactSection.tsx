@@ -7,11 +7,11 @@ export const ContactSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mx-auto font-['Almarena_Neue'] text-3xl md:text-6xl leading-[1.2] md:leading-[80px]"
+          className="mx-auto font-['Almarena_Neue'] text-3xl md:text-6xl max-md:[500px] leading-[1.2] md:leading-[80px]"
         >
-          Make their Christmas one<br className="hidden md:block"/>
-           to remember—start your<br className="hidden md:block"/>
-           prank postcard now!
+          Make their Christmas one <br className="hidden md:block"/>
+           to remember—start your <br className="hidden md:block"/>
+           prank postcard!
         </motion.h2>
         <motion.address 
           initial={{ opacity: 0 }}
@@ -28,7 +28,7 @@ export const ContactSection = () => {
           </a> <br className="md:hidden"/>
           <a 
             href="tel:+17007007070" 
-            className="hover:text-gray-600 transition-colors block mt-2 md:mt-0 md:inline-block"
+            className="hover:text-gray-600 transition-colors block mt-2 max-md:mt-[-30px] md:inline-block"
           >
             +1 (700) 700 - 7070
           </a>

@@ -30,7 +30,7 @@ export const HowItWorksSection = () => {
           className="text-center"
         >
           <h2 className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-2">How It Works?</h2>
-          <p className="text-xl md:text-2xl">Your Prank in Three Simple Steps</p>
+          <p className="text-xl md:text-2xl">Your Prank in <br/>Three Simple Steps</p>
         </motion.div>
         
         <div className="flex flex-col mt-8 md:mt-10 w-full max-w-2xl mx-auto text-lg md:text-2xl">
