@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion';
 import type { FamilyPranksSectionProps } from '../../types';
 
-import Image from 'next/image';
-
 export const FamilyPranksSection = ({ title, imageUrl }: FamilyPranksSectionProps) => {
   return (
     <motion.section 
