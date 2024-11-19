@@ -10,8 +10,8 @@ export const ContactSection = () => {
           className="mx-auto font-['Almarena_Neue'] text-3xl md:text-6xl leading-[1.2] md:leading-[80px]"
         >
           Make their Christmas one<br className="hidden md:block"/>
-          to remember—start your<br className="hidden md:block"/>
-          prank postcard now!
+           to remember—start your<br className="hidden md:block"/>
+           prank postcard now!
         </motion.h2>
         <motion.address 
           initial={{ opacity: 0 }}

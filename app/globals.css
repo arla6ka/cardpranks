@@ -24,7 +24,7 @@ body {
 /* globals.css */
 @font-face {
   font-family: 'Almarena Neue';
-  src: url('./public/fonts/AlmarenaNeue-Bold.woff2') format('woff2');
+  src: url('./public/fonts/AlmarenaNeueDisplay-Medium.woff2') format('woff2');
   font-weight: normal;  /* Change from bold to normal */
   font-style: normal;
   font-display: swap;
