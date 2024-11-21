@@ -68,7 +68,7 @@ export const InfiniteTestimonials = () => {
             className={cn(
               "flex min-w-full gap-8 py-4 w-max flex-nowrap overflow-visible",
               start && "animate-scroll",
-              "hover:[animation-play-state:paused]"
+              "hover:[animation-play-state]"
             )}
           >
             {testimonials.map((item, idx) => (

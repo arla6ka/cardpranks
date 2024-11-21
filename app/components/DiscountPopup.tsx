@@ -36,7 +36,7 @@ export const DiscountPopup = () => {
            opacity: 0 
          }}
          transition={{ type: "spring", damping: 20, stiffness: 100 }}
-         className="fixed md:bottom-8 md:right-8 bottom-0 right-0 z-50 md:w-auto w-full"
+         className="fixed md:bottom-8 md:right-8 bottom-0 border md:rounded-2xl border-black right-0 z-50 md:w-auto w-full"
        >
          <div className="bg-white md:rounded-2xl shadow-2xl p-6 max-w-full md:max-w-sm">
            <button 
