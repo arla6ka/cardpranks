@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 const testimonials = [
  {
-   quote: "Sent this to my brother pretending to be his old college roommate. His face when he got it was priceless! Best prank ever 😂",
+   quote: "Sent this to my brother pretending to be his old college roommate. Best prank ever 😂",
    name: "Sarah M.",
    location: "New York",
    image: "/testimonial1.jpg"
