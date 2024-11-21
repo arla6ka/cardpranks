@@ -2,13 +2,13 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
-const genAI = new GoogleGenerativeAI('AIzaSyD5sOhW2TuETp5DrVpkr0pD2lcn0humoTI');
+const genAI = new GoogleGenerativeAI(process.env.GENERATIVE_AI_API_KEY!);
 
 const systemPrompt = `You are a creative writer helping people create funny and lighthearted prank Christmas postcards. 
 These postcards are meant to playfully confuse the recipients by pretending to be from someone they might know but can't quite place.
 The tone should be friendly and festive, but slightly mysterious.
 Some guidelines:
-- Keep the message more than 350 and under 400 characters, including spaces and punctuation, NO MORE THAN 400
+- Keep the message more than 350 and    under 400 characters, including spaces and punctuation, NO MORE THAN 400
 - Include some vague references to made-up shared experiences
 - Add holiday wishes
 - Be humorous but never mean-spirited
