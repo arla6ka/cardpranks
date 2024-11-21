@@ -153,7 +153,7 @@ export default function CreatePage() {
             {currentStep > 0 && (
               <button
                 onClick={() => setCurrentStep((prev) => prev - 1)}
-                className="px-8 py-3 rounded-full border border-black text-xl font-['Consolas'] bg-white hover:bg-gray-50 transition-colors"
+                className="px-8 py-3 rounded-full border border-black text-xl font-['Consola'] bg-white hover:bg-gray-50 transition-colors"
               >
                 Back
               </button>
