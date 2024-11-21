@@ -50,7 +50,7 @@ export const FAQSection = () => {
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
-    className="flex flex-col mt-6 md:mt-8 w-full text-left"
+    className="flex flex-col mt-0 md:mt-8 w-full text-left"
   >
     <h3 className="font-['Almarena_Neue'] text-xl md:text-2xl font-semibold leading-tight">
       {question}

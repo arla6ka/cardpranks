@@ -7,19 +7,24 @@ import { FAQSection } from './components/sections/FAQSection';
 import { ContactSection } from './components/sections/ContactSection';
 import { motion } from 'framer-motion';
 import { Header } from './components/Header';
+import { DiscountPopup } from './components/DiscountPopup';
+import { InfiniteTestimonials } from './components/SocialProof';
 
 export default function PrankCardsPage() {
   return (
+    <>
     <main className="flex overflow-hidden flex-col pt-6 bg-white font-['Consolas']">
       <Header/>
       <div className="flex flex-col items-center px-6">
+      
         <HeroSection />
-        <FamilyPranksSection 
-          title="See How Other Families Got Pranked"
-          imageUrl="/IMG_2148.MP4"
-        />
+        <InfiniteTestimonials />
+        <DiscountPopup />
+        
         <HowItWorksSection />
         <PricingSection />
+        <FamilyPranksSection 
+        />
         <FAQSection />
         <ContactSection />
         <div className="relative w-screen -ml-[50vw] -mr-[50vw]">
@@ -35,5 +40,7 @@ export default function PrankCardsPage() {
         </div>
       </div>
     </main>
+    
+    </>
   );
 }
