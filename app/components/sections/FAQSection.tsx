@@ -8,10 +8,6 @@ const faqItems: FAQItemProps[] = [
     answer: "Only if you include your name! Otherwise, we keep your identity a secret."
   },
   {
-    question: "Can I schedule the delivery?",
-    answer: "Yes! You can select a future date for the perfect holiday surprise."
-  },
-  {
     question: "How long does delivery take?",
     answer: "We ship fast—usually within X days of your order."
   },

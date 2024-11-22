@@ -71,7 +71,7 @@ export function HandwritingStep({ initialData, updateData }: HandwritingStepProp
             <img
               src={style.preview_url}
               alt={`Handwriting style by ${style.name}`}
-              className="w-full aspect-[2.12] object-contain"
+              className="w-full aspect-[2.12] object-contain "
             />
           </button>
         ))}

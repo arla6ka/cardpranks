@@ -22,7 +22,7 @@ export const PricingSection = () => {
         >
           <div className="flex overflow-hidden gap-1 justify-center items-center py-8 md:py-10 w-full border border-black border-solid bg-white bg-opacity-20 rounded-[35px] md:rounded-[45px] shadow-[0px_4px_4px_rgba(9,9,9,0.26)]">
             <div className="flex flex-col items-center w-full">
-              <p className="font-['Almarena_Neue'] text-4xl md:text-6xl">9.00$</p>
+              <p className="font-['Almarena_Neue'] text-4xl md:text-6xl">$9.00</p>
               <p className="mt-2 text-lg md:text-xl">single card</p>
             </div>
           </div>

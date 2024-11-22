@@ -6,12 +6,12 @@ const steps = [
   {
     number: "1",
     title: "Choose a Design",
-    description: "Browse our Christmas-themed postcards—classic, quirky, or completely ridiculous."
+    description: "Browse our Christmas-themed postcards: classic, quirky, or completely ridiculous."
   },
   {
     number: "2",
     title: "Write a Message",
-    description: "Add a festive note or a cryptic message that keeps them guessing who sent it."
+    description: "Add a festive note or a mysterious message that keeps them guessing who sent it."
   },
   {
     number: "3",

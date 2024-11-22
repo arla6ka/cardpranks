@@ -64,7 +64,7 @@ export const DiscountPopup = () => {
                Limited Time Offer!
              </h3>
              <p className="text-gray-600 mb-4">
-               Get 20% off on all Christmas prank cards until November 31st
+               Get 20% off on all Christmas prank cards until November 31th
              </p>
              <motion.button
                whileHover={{ scale: 1.05 }}

@@ -27,7 +27,7 @@ export const HeroSection = () => {
   Send a Fake Christmas Postcard <br /> They&apos;ll Never Forget.
 </h1>
         <p className="mt-3 md:mt-4 text-xl md:text-2xl leading-tight text-center px-4 md:px-0">
-          Custom Prank Christmas Postcards only for 9$
+          Custom Prank Christmas Postcards only for $9
         </p>
         <div className="mt-6 md:mt-8" />
         <CreatePostcardButton 
