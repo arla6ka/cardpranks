@@ -172,7 +172,7 @@ export function PaymentStep({ formData }: PaymentStepProps) {
           stripe={stripePromise}
           options={{
             mode: 'payment',
-            amount: 898,
+            amount: 51,
             currency: 'usd',
             appearance: {
               theme: 'stripe',
