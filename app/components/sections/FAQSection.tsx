@@ -12,20 +12,20 @@ const faqItems: FAQItemProps[] = [
     answer: "Only if you include your name! All cards are signed as CRDPK to maintain anonymity."
   },  
   {
-    question: "How much does it cost? Do you offer volume discounts?",
-    answer: "Our cards are just $8.90 including postage per card. For bulk orders or special requirements, please contact us."
+    question: "How much does it cost?",
+    answer: "Our cards are just $8.90 including postage. For bulk orders, please contact us."
   },
   {
-    question: "What kind of stationery card stock do you use?",
+    question: "What kind of stationery do you use?",
     answer: "We use premium, luxurious stationery that &quot;screams&quot; quality to your recipients."
   },
   {
-    question: "Can you create the cards and ship them all to me?",
+    question: "Can you ship the cards to me?",
     answer: "Sure! Simply let us know and we&apos;ll deliver them to you, ready to go."
   },
   {
-    question: "Can I choose from different handwriting styles?",
-    answer: "Yes! We offer several authentic handwriting styles you can choose from to make your message more personal and believable."
+    question: "Can I choose different styles?",
+    answer: "Yes! We offer several authentic handwriting styles to make your message more personal and believable."
   }
 ];
 
@@ -38,7 +38,7 @@ export const FAQSection = () => {
         viewport={{ once: true }}
         className="text-center"
       >
-        <h2 className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-2">Questions? <br/>We've got you.</h2>
+        <h2 className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-2">Questions?<br/>We&apos;ve got you.</h2>
       </motion.div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 mt-8 md:mt-16 w-full max-w-6xl mx-auto">
