@@ -160,16 +160,16 @@ export function PaymentStep({ formData }: PaymentStepProps) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            formData, // Make sure this includes all necessary data
-            amount: 51,
+            formData,
+            amount: 51, // Changed to represent $8.98 in cents
             currency: 'usd',
           }),
         });
-  
+    
         if (!response.ok) {
           throw new Error('Failed to create payment intent');
         }
-  
+    
         const clientSecret = await response.text();
         setClientSecret(clientSecret);
       } catch (err) {
@@ -177,7 +177,6 @@ export function PaymentStep({ formData }: PaymentStepProps) {
         setError(err instanceof Error ? err.message : 'Failed to setup payment');
       }
     }
-  
     createPaymentIntent();
   }, [formData]);
 
