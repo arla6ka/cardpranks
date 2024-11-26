@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { headers } from 'next/headers';
+import { tempDataStore } from '../../lib/tempStore';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-11-20.acacia',
@@ -37,17 +38,26 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Webhook Error' }, { status: 400 });
   }
 
-  // Log the event type and data for debugging
-  console.log('Webhook event type:', event.type);
-  console.log('Event data:', JSON.stringify(event.data, null, 2));
+// app/api/webhook/route.ts (relevant part)
+if (event.type === 'payment_intent.succeeded') {
+  const paymentIntent = event.data.object as Stripe.PaymentIntent;
+  
+  // Get form data from tempStore using formDataId from metadata
+  const formDataId = paymentIntent.metadata.formDataId;
+  const formData = tempDataStore.get(formDataId);
 
-  if (event.type === 'payment_intent.succeeded') {
-    const paymentIntent = event.data.object as Stripe.PaymentIntent;
-    
+  if (!formData) {
+    console.error('Form data not found for ID:', formDataId);
+    console.error('Available keys:', [...tempDataStore.keys()]);
+    return NextResponse.json(
+      { error: `Form data not found for ID: ${formDataId}` },
+      { status: 400 }
+    );
+  }
+
+  // ... rest of the webhook handler remains the same
+
     try {
-      // Get form data from metadata
-      const formData = JSON.parse(paymentIntent.metadata.formData || '{}');
-
       const requestBody = {
         message: sanitizeText(formData.message),
         handwriting: formData.handwriting._id,
@@ -84,13 +94,12 @@ export async function POST(req: Request) {
         body: JSON.stringify(requestBody),
       });
 
-      const responseData = await response.text();
-      console.log('Handwrite API Response:', responseData);
-
       if (!response.ok) {
-        throw new Error(`Handwrite API error: ${responseData}`);
+        throw new Error(`Handwrite API error: ${await response.text()}`);
       }
 
+      // Clean up stored data after successful API call
+      tempDataStore.delete(paymentIntent.id);
       return NextResponse.json({ success: true });
     } catch (error) {
       console.error('Error sending to Handwrite:', error);

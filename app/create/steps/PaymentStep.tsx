@@ -73,7 +73,7 @@ function CheckoutForm({ formData }: { formData: FormData }) {
         throw new Error('Failed to create payment intent');
       }
 
-      const { clientSecret } = await paymentResponse.json();
+      const clientSecret = await paymentResponse.text();
 
       const { error: submitError } = await elements.submit();
       if (submitError) {
