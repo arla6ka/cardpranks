@@ -3,6 +3,8 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
 export default function SuccessPage() {
   const searchParams = useSearchParams();
@@ -18,19 +20,109 @@ export default function SuccessPage() {
       .then(data => {
         if (data.status === 'succeeded') {
           setStatus('success');
-          setTimeout(() => router.push('/'), 3000);
         } else {
           setStatus('failed');
         }
       })
       .catch(() => setStatus('failed'));
-  }, [payment_intent, router]);
+  }, [payment_intent]);
+
+  const handleReturnHome = () => {
+    router.push('/');
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      {status === 'loading' && <p>Processing your payment...</p>}
-      {status === 'success' && <p>Payment successful! Redirecting...</p>}
-      {status === 'failed' && <p>Payment failed. Please try again.</p>}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-gray-50">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-md w-full mx-4 p-8 rounded-2xl bg-white shadow-xl border border-gray-100"
+      >
+        {status === 'loading' && (
+          <div className="text-center">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              className="inline-block"
+            >
+              <Loader2 className="w-16 h-16 text-black" />
+            </motion.div>
+            <h2 className="mt-6 text-2xl font-semibold text-gray-900">
+              Processing your payment...
+            </h2>
+            <p className="mt-2 text-gray-600">
+              Please wait while we confirm your order.
+            </p>
+          </div>
+        )}
+
+        {status === 'success' && (
+          <div className="text-center">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", duration: 0.5 }}
+            >
+              <CheckCircle className="w-16 h-16 mx-auto text-green-500" />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <h2 className="mt-6 text-3xl font-bold text-gray-900">
+                Thank You!
+              </h2>
+              <p className="mt-4 text-lg text-gray-600">
+                Your postcard has been ordered successfully.
+              </p>
+              <p className="mt-2 text-sm text-gray-500">
+                We'll notify your recipient as soon as it's delivered.
+              </p>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleReturnHome}
+                className="mt-8 px-8 py-3 rounded-full bg-black text-white font-['Consolas'] hover:bg-gray-800 transition-colors"
+              >
+                Return to Home
+              </motion.button>
+            </motion.div>
+          </div>
+        )}
+
+        {status === 'failed' && (
+          <div className="text-center">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", duration: 0.5 }}
+            >
+              <XCircle className="w-16 h-16 mx-auto text-red-500" />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <h2 className="mt-6 text-3xl font-bold text-gray-900">
+                Oops! Something went wrong
+              </h2>
+              <p className="mt-4 text-gray-600">
+                We couldn't process your payment. Please try again.
+              </p>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleReturnHome}
+                className="mt-8 px-8 py-3 rounded-full bg-black text-white font-['Consolas'] hover:bg-gray-800 transition-colors"
+              >
+                Return to Home
+              </motion.button>
+            </motion.div>
+          </div>
+        )}
+      </motion.div>
     </div>
   );
 }
