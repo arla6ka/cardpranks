@@ -24,7 +24,7 @@ const PROMPT_EXAMPLES = [
   "Create a message reminiscing about a fake coffee shop meetup"
 ];
 
-export function MessageStep({ initialData, updateData, onBack }: MessageStepProps) {
+export function MessageStep({ initialData, updateData}: MessageStepProps) {
   const [message, setMessage] = useState<string>(initialData || '');
   const [aiPrompt, setAiPrompt] = useState<string>('');
   const [generating, setGenerating] = useState<boolean>(false);

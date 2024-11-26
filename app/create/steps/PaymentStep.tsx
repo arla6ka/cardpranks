@@ -7,8 +7,7 @@ import {
   Elements,
   PaymentElement,
   useStripe,
-  useElements,
-  AddressElement
+  useElements
 } from '@stripe/react-stripe-js';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
@@ -28,10 +27,9 @@ interface FormData {
 interface PaymentStepProps {
   formData: FormData;
   onBack: () => void;
-  onSuccess: () => void;
 }
 
-function CheckoutForm({ onSuccess }: { onSuccess: () => void }) {
+function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState<string | null>(null);
@@ -124,13 +122,13 @@ function CheckoutForm({ onSuccess }: { onSuccess: () => void }) {
         disabled={!stripe || processing}
         className="w-full px-8 py-3 rounded-full border border-black text-xl font-['Consolas'] bg-white hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {processing ? 'Processing...' : 'Pay $9.00'}
+        {processing ? 'Processing...' : 'Pay $8.90'}
       </button>
     </form>
   );
 }
 
-export function PaymentStep({ formData, onSuccess }: PaymentStepProps) {
+export function PaymentStep({ formData }: PaymentStepProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -144,7 +142,7 @@ export function PaymentStep({ formData, onSuccess }: PaymentStepProps) {
           },
           body: JSON.stringify({
             formData,
-            amount: 900,
+            amount: 890, // Changed to $8.90
             currency: 'usd',
           }),
         });
@@ -174,9 +172,12 @@ export function PaymentStep({ formData, onSuccess }: PaymentStepProps) {
 
   return (
     <div className="flex flex-col items-center px-6 max-w-[917px] mx-auto">
-      <h1 className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-10 text-center">
+      <h1 className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-4 text-center">
         Complete Your Payment
       </h1>
+      <p className="text-gray-600 text-lg mb-10">
+        Secure payment powered by Stripe
+      </p>
 
       <div className="w-full max-w-[589px] p-6 rounded-xl border border-black border-solid bg-white bg-opacity-20 shadow-[0px_4px_4px_rgba(9,9,9,0.26)]">
         {clientSecret && (
@@ -194,7 +195,7 @@ export function PaymentStep({ formData, onSuccess }: PaymentStepProps) {
               }
             }}
           >
-            <CheckoutForm onSuccess={onSuccess} />
+            <CheckoutForm />
           </Elements>
         )}
       </div>

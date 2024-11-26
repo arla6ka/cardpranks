@@ -8,6 +8,10 @@ const faqItems: FAQItemProps[] = [
     answer: "Fast! Cards are typically mailed within 1 business day and delivered over the following 1-3 days."
   },
   {
+    question: "Will they know it&apos;s from me?",
+    answer: "Only if you include your name! All cards are signed as CRDPK to maintain anonymity."
+  },
+  {
     question: "How much does it cost? Do you offer volume discounts?",
     answer: "Our cards are just $9.00 including postage per card. For bulk orders or special requirements, please contact us."
   },

@@ -1,6 +1,7 @@
+// app/create/page.tsx
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { RecipientInfoStep } from './steps/RecipientInfoStep';
 import { ReturnAddressStep } from './steps/ReturnAddressStep';
 import { DesignStep } from './steps/DesignStep';
@@ -8,7 +9,6 @@ import { HandwritingStep } from './steps/HandwritingStep';
 import { MessageStep } from './steps/MessageStep';
 import { PaymentStep } from './steps/PaymentStep';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
 
 interface FormData {
   recipient: {
@@ -52,7 +52,6 @@ const INITIAL_FORM_DATA: FormData = {
 export default function CreatePage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
-  const [isPaymentComplete, setIsPaymentComplete] = useState(false);
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
 
   useEffect(() => {
@@ -90,7 +89,7 @@ export default function CreatePage() {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     try {
       const postData = {
         message: formData.message,
@@ -118,15 +117,11 @@ export default function CreatePage() {
       const result = await response.json();
       console.log('Success:', result);
       localStorage.removeItem('postcardForm');
+      router.push('/success');
     } catch (error) {
       console.error('Error:', error);
     }
-  };
-
-  const handlePaymentSuccess = () => {
-    setIsPaymentComplete(true);
-    handleSubmit(); // Send postcard after successful payment
-  };
+  }, [formData, router]);
 
   const updateFormSection = (section: keyof FormData, data: any) => {
     setFormData((prev) => {
@@ -137,10 +132,8 @@ export default function CreatePage() {
   };
 
   const goToStep = (step: number) => {
-    // Can't skip forward
     if (step > currentStep + 1) return;
 
-    // Can't proceed without completing current step
     if (step > currentStep && !isStepValid(currentStep)) {
       alert('Please complete all required fields before proceeding.');
       return;
@@ -171,7 +164,7 @@ export default function CreatePage() {
       case 2:
         return (
           <DesignStep
-            initialData={formData.card?._id || undefined}
+            initialData={formData.card?._id}
             updateData={(data) => updateFormSection('card', { _id: data })}
             onNext={() => setCurrentStep(3)}
             onBack={() => setCurrentStep(1)}
@@ -180,7 +173,7 @@ export default function CreatePage() {
       case 3:
         return (
           <HandwritingStep
-            initialData={formData.handwriting?._id || undefined}
+            initialData={formData.handwriting?._id}
             updateData={(data) => updateFormSection('handwriting', { _id: data })}
             onNext={() => setCurrentStep(4)}
             onBack={() => setCurrentStep(2)}
@@ -200,7 +193,6 @@ export default function CreatePage() {
           <PaymentStep
             formData={formData}
             onBack={() => setCurrentStep(4)}
-            onSuccess={handlePaymentSuccess}
           />
         );
       default:
@@ -212,38 +204,32 @@ export default function CreatePage() {
     <main className="min-h-screen bg-white pb-32">
       <div className="pt-10">{StepContent}</div>
 
-      {/* Fixed Navigation Footer */}
-      {/* Fixed Navigation Footer */}
-<div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-t border-gray-200">
-  <div className="max-w-[1170px] mx-auto px-6">
-    <div className="flex justify-between items-center h-16">
-      {currentStep > 0 && (
-        <motion.button
-          whileHover={{ x: -5 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => goToStep(currentStep - 1)}
-          className="text-gray-600 hover:text-black transition-colors flex items-center gap-2"
-        >
-          <span className="text-lg">←</span>
-          Back
-        </motion.button>
-      )}
-      <div className="flex-1" />
-      {currentStep < 5 && (
-        <motion.button
-          whileHover={{ x: 5 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => goToStep(currentStep + 1)}
-          disabled={isStepValid(currentStep) === false}
-          className="text-black flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {currentStep === 4 ? 'Proceed to Payment' : 'Next'}
-          <span className="text-lg">→</span>
-        </motion.button>
-      )}
-    </div>
-  </div>
-</div>
+      <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-t border-gray-200">
+        <div className="max-w-[1170px] mx-auto px-6">
+          <div className="flex justify-between items-center h-16">
+            {currentStep > 0 && (
+              <button
+                onClick={() => goToStep(currentStep - 1)}
+                className="text-gray-600 hover:text-black transition-colors flex items-center gap-2"
+              >
+                <span className="text-lg">←</span>
+                Back
+              </button>
+            )}
+            <div className="flex-1" />
+            {currentStep < 5 && (
+              <button
+                onClick={() => goToStep(currentStep + 1)}
+                disabled={!isStepValid(currentStep)}
+                className="text-black flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {currentStep === 4 ? 'Proceed to Payment' : 'Next'}
+                <span className="text-lg">→</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

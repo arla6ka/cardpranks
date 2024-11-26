@@ -2,7 +2,7 @@
 import { Stripe } from 'stripe';
 
 declare global {
-  var tempDataStore: Map<string, any>;
+  let tempDataStore: Map<string, any>; // Changed from var to let
 }
 
 export interface CheckoutSessionData {
