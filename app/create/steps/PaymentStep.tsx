@@ -143,7 +143,7 @@ export function PaymentStep({ formData }: PaymentStepProps) {
           },
           body: JSON.stringify({
             formData,
-            amount: 1, // Changed to $8.90
+            amount: 51, // Changed to $8.90
             currency: 'usd',
           }),
         });
