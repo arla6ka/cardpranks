@@ -1,7 +1,6 @@
-// components/PaymentStep.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import {
   Elements,
@@ -9,20 +8,9 @@ import {
   useStripe,
   useElements
 } from '@stripe/react-stripe-js';
+import type { FormData } from '../../types/form';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-
-interface FormData {
-  recipient: {
-    firstName: string;
-    lastName: string;
-    street1: string;
-    city: string;
-    state: string;
-    zip: string;
-  };
-  message: string;
-}
 
 interface PaymentStepProps {
   formData: FormData;
@@ -30,7 +18,7 @@ interface PaymentStepProps {
   onSuccess: () => void;
 }
 
-function CheckoutForm() {
+function CheckoutForm({ formData }: { formData: FormData }) {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState<string | null>(null);
@@ -66,6 +54,26 @@ function CheckoutForm() {
 
       const { customerId } = await customerResponse.json();
 
+      // Create a new payment intent with the customer ID
+      const paymentResponse = await fetch('/api/checkout_sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          formData,
+          amount: 898,
+          currency: 'usd',
+          customerId,
+        }),
+      });
+
+      if (!paymentResponse.ok) {
+        throw new Error('Failed to create payment intent');
+      }
+
+      const { clientSecret } = await paymentResponse.json();
+
       const { error: submitError } = await elements.submit();
       if (submitError) {
         throw submitError;
@@ -73,6 +81,7 @@ function CheckoutForm() {
 
       const { error: confirmError } = await stripe.confirmPayment({
         elements,
+        clientSecret,
         confirmParams: {
           return_url: `${window.location.origin}/success`,
           payment_method_data: {
@@ -148,37 +157,7 @@ function CheckoutForm() {
 }
 
 export function PaymentStep({ formData }: PaymentStepProps) {
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function createPaymentIntent() {
-      try {
-        const response = await fetch('/api/checkout_sessions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            formData,
-            amount: 51, // Changed to represent $8.98 in cents
-            currency: 'usd',
-          }),
-        });
-    
-        if (!response.ok) {
-          throw new Error('Failed to create payment intent');
-        }
-    
-        const clientSecret = await response.text();
-        setClientSecret(clientSecret);
-      } catch (err) {
-        console.error('Payment setup error:', err);
-        setError(err instanceof Error ? err.message : 'Failed to setup payment');
-      }
-    }
-    createPaymentIntent();
-  }, [formData]);
 
   if (error) {
     return (
@@ -198,24 +177,24 @@ export function PaymentStep({ formData }: PaymentStepProps) {
       </p>
 
       <div className="w-full max-w-[589px] p-6 rounded-xl border border-black border-solid bg-white bg-opacity-20 shadow-[0px_4px_4px_rgba(9,9,9,0.26)]">
-        {clientSecret && (
-          <Elements
-            stripe={stripePromise}
-            options={{
-              clientSecret,
-              appearance: {
-                theme: 'stripe',
-                variables: {
-                  colorPrimary: '#000000',
-                  colorBackground: '#ffffff',
-                  borderRadius: '12px',
-                },
-              }
-            }}
-          >
-            <CheckoutForm />
-          </Elements>
-        )}
+        <Elements
+          stripe={stripePromise}
+          options={{
+            mode: 'payment',
+            amount: 898,
+            currency: 'usd',
+            appearance: {
+              theme: 'stripe',
+              variables: {
+                colorPrimary: '#000000',
+                colorBackground: '#ffffff',
+                borderRadius: '12px',
+              },
+            }
+          }}
+        >
+          <CheckoutForm formData={formData} />
+        </Elements>
       </div>
     </div>
   );

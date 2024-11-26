@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
+import type { FormData } from '../types/form';
 import { RecipientInfoStep } from './steps/RecipientInfoStep';
 import { ReturnAddressStep } from './steps/ReturnAddressStep';
 import { DesignStep } from './steps/DesignStep';
@@ -9,31 +10,6 @@ import { HandwritingStep } from './steps/HandwritingStep';
 import { MessageStep } from './steps/MessageStep';
 import { PaymentStep } from './steps/PaymentStep';
 import { useRouter } from 'next/navigation';
-
-interface FormData {
-  recipient: {
-    firstName: string;
-    lastName: string;
-    company?: string;
-    street1: string;
-    street2?: string;
-    city: string;
-    state: string;
-    zip: string;
-  };
-  from?: {
-    firstName: string;
-    lastName: string;
-    street1: string;
-    street2?: string;
-    city: string;
-    state: string;
-    zip: string;
-  };
-  message: string;
-  handwriting: { _id: string } | null;
-  card: { _id: string } | null;
-}
 
 const INITIAL_FORM_DATA: FormData = {
   recipient: {
@@ -79,9 +55,9 @@ export default function CreatePage() {
       case 1:
         return true; // Return address is optional
       case 2:
-        return Boolean(formData.card?._id);
+        return Boolean(formData.card);
       case 3:
-        return Boolean(formData.handwriting?._id);
+        return Boolean(formData.handwriting);
       case 4:
         return Boolean(formData.message.trim());
       default:
