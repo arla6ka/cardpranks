@@ -21,7 +21,7 @@ const faqItems: FAQItemProps[] = [
   },
   {
     question: "Will my bank statement show your company’s name?",
-    answer: "For your privacy, your bank statement will show a shortened version of our name. This ensure secure and disguised. For billing inquiries, contact us."
+    answer: "For your privacy, your bank statement will show a shortened version of our name. This ensures it’s secure and disguised. For billing inquiries, contact us."
   }, 
   {
     question: "Can I choose different styles?",
