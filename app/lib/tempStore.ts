@@ -23,6 +23,7 @@ interface FormData {
   };
 }
 
+// eslint-disable-next-line no-var
 declare global {
   var globalTempStore: Map<string, FormData> | undefined;
 }
