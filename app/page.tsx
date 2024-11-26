@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import { Header } from './components/Header';
 import { DiscountPopup } from './components/DiscountPopup';
 import { InfiniteTestimonials } from './components/SocialProof';
+import { HandwritingExplainer } from './components/sections/HandwritingExplainer';
 
 export default function PrankCardsPage() {
   return (
@@ -20,7 +21,7 @@ export default function PrankCardsPage() {
         <HeroSection />
         <InfiniteTestimonials />
         <DiscountPopup />
-        
+        <HandwritingExplainer />
         <HowItWorksSection />
         <PricingSection />
         <FamilyPranksSection 

@@ -14,9 +14,9 @@ const pranks = [
 ];
 
 export const FamilyPranksSection = () => {
- const [canScrollLeft, setCanScrollLeft] = useState(false);
- const [canScrollRight, setCanScrollRight] = useState(true);
- const containerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
 
  const checkScrollability = () => {
    if (containerRef.current) {
@@ -38,61 +38,77 @@ export const FamilyPranksSection = () => {
  }, []);
 
  return (
-   <motion.section 
-     initial={{ opacity: 0 }}
-     whileInView={{ opacity: 1 }}
-     viewport={{ once: true }}
-     className="w-full mt-20 bg-white"
-   >
-     <div className="max-w-7xl mx-auto px-6">
-       <h2 className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-10 text-center">
-         Real Christmas Pranks
-       </h2>
-       
-       <div 
-         ref={containerRef}
-         className="relative flex overflow-x-scroll scroll-smooth [scrollbar-width:none] gap-8 py-4"
-         onScroll={checkScrollability}
-       >
-         {pranks.map((prank, idx) => (
-           <div key={idx} className="flex-shrink-0">
-             <motion.div 
-               initial={{ scale: 0.9, opacity: 0 }}
-               whileInView={{ scale: 1, opacity: 1 }}
-               transition={{ delay: idx * 0.1 }}
-               className="rounded-2xl overflow-hidden  w-[300px]"
-             >
-               <video 
-                 autoPlay 
-                 loop 
-                 muted 
-                 playsInline
-                 className="w-full h-full object-cover"
-               >
-                 <source src={prank.video} type="video/mp4" />
-               </video>
-             </motion.div>
-           </div>
-         ))}
-       </div>
+  <motion.section 
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+    viewport={{ once: true }}
+    className="w-full py-24"
+  >
+    <div className="max-w-7xl mx-auto px-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-center max-w-2xl mx-auto mb-16"
+      >
+        <h2 className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-4">
+          Real Reactions
+        </h2>
+        <p className="text-xl text-gray-600">
+          Watch how people react when they receive our mysterious Christmas cards
+        </p>
+      </motion.div>
+      
+      <div 
+        ref={containerRef}
+        className="relative flex overflow-x-scroll scroll-smooth [scrollbar-width:none] gap-8 py-4 pb-8"
+        onScroll={checkScrollability}
+      >
+        {pranks.map((prank, idx) => (
+          <div key={idx} className="flex-shrink-0">
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              transition={{ delay: idx * 0.1 }}
+              className="rounded-2xl overflow-hidden w-[250px] shadow-lg hover:shadow-xl transition-shadow duration-300"
+            >
+              <video 
+                autoPlay 
+                loop 
+                muted 
+                playsInline
+                className="w-full  object-cover"
+              >
+                <source src={prank.video} type="video/mp4" />
+              </video>
+            </motion.div>
+          </div>
+        ))}
+      </div>
 
-       <div className="flex justify-end gap-2 mt-4">
-         <button
-           onClick={() => scroll('left')}
-           disabled={!canScrollLeft}
-           className="h-10 w-10 rounded-full bg-white border border-black flex items-center justify-center disabled:opacity-50 transition-colors"
-         >
-           <IconArrowNarrowLeft className="h-6 w-6" />
-         </button>
-         <button
-           onClick={() => scroll('right')}
-           disabled={!canScrollRight}
-           className="h-10 w-10 rounded-full bg-white border border-black flex items-center justify-center disabled:opacity-50 transition-colors"
-         >
-           <IconArrowNarrowRight className="h-6 w-6" />
-         </button>
-       </div>
-     </div>
-   </motion.section>
- );
+      <div className="flex justify-center gap-4 mt-8">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => scroll('left')}
+          disabled={!canScrollLeft}
+          className="h-12 w-12 rounded-full bg-white border-2 border-black flex items-center justify-center 
+                     disabled:opacity-50 transition-all hover:bg-black hover:text-white disabled:hover:bg-white disabled:hover:text-black"
+        >
+          <IconArrowNarrowLeft className="h-6 w-6" />
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => scroll('right')}
+          disabled={!canScrollRight}
+          className="h-12 w-12 rounded-full bg-white border-2 border-black flex items-center justify-center 
+                     disabled:opacity-50 transition-all hover:bg-black hover:text-white disabled:hover:bg-white disabled:hover:text-black"
+        >
+          <IconArrowNarrowRight className="h-6 w-6" />
+        </motion.button>
+      </div>
+    </div>
+  </motion.section>
+);
 };

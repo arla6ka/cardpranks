@@ -1,6 +1,6 @@
 'use client'
 import { motion, useScroll } from 'framer-motion';
-import { CreatePostcardButton } from './buttons/CreatePostcardButton';
+import { CreatePostcardButton } from './CreatePostcardButton';
 
 export const Header = () => {
  const { scrollY } = useScroll();

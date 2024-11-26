@@ -1,19 +1,35 @@
+// message step file (MessageStep.tsx)
 'use client';
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Sparkles, Bot, Loader2 } from 'lucide-react';
 
 interface MessageStepProps {
   initialData?: string;
+  onNext?: () => void; 
   onBack: () => void;
-  updateData: (data: string) => void; // Fixed type for updateData
-  handleSubmit: () => Promise<void>;
+  updateData: (data: string) => void;
 }
 
-export function MessageStep({ initialData, updateData, handleSubmit }: MessageStepProps) {
+const PROMPT_EXAMPLES = [
+  "Write a funny Christmas message from a secret admirer",
+  "Create a mysterious holiday greeting with inside jokes",
+  "Write a nostalgic message about fictional childhood memories",
+  "Compose a playful message mentioning made-up holiday traditions",
+  "Write a cryptic message about a non-existent Christmas party",
+  "Create a message about a fictional shared hobby",
+  "Write as an old friend from a made-up summer camp",
+  "Compose a message about an imaginary college adventure",
+  "Write about a fictional neighborhood memory",
+  "Create a message reminiscing about a fake coffee shop meetup"
+];
+
+export function MessageStep({ initialData, updateData, onBack }: MessageStepProps) {
   const [message, setMessage] = useState<string>(initialData || '');
   const [aiPrompt, setAiPrompt] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
   const [generating, setGenerating] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentExampleIndex, setCurrentExampleIndex] = useState(0);
   const MAX_CHARS = 400;
 
   useEffect(() => {
@@ -22,10 +38,21 @@ export function MessageStep({ initialData, updateData, handleSubmit }: MessageSt
     }
   }, [initialData]);
 
+  // Rotate through examples
+  useEffect(() => {
+    if (message.length > 0) return; // Don't rotate if there's a message
+
+    const interval = setInterval(() => {
+      setCurrentExampleIndex((prev) => (prev + 1) % PROMPT_EXAMPLES.length);
+    }, 2000); // Change every 2 seconds
+
+    return () => clearInterval(interval);
+  }, [message.length]);
+
   const handleChange = (value: string) => {
     if (value.length <= MAX_CHARS) {
       setMessage(value);
-      updateData(value); // Pass the updated message to parent
+      updateData(value);
     }
   };
 
@@ -50,8 +77,8 @@ export function MessageStep({ initialData, updateData, handleSubmit }: MessageSt
 
       const data = await response.json();
       setMessage(data.message);
-      updateData(data.message); // Update parent with the AI-generated message
-      setAiPrompt(''); // Clear the prompt after successful generation
+      updateData(data.message);
+      setAiPrompt('');
     } catch (error) {
       setError('Failed to generate message. Please try again.');
       console.error('Generation error:', error);
@@ -60,73 +87,114 @@ export function MessageStep({ initialData, updateData, handleSubmit }: MessageSt
     }
   };
 
-  const onSubmit = async () => {
-    setLoading(true);
-    try {
-      await handleSubmit();
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="flex flex-col items-center px-6 max-w-[1170px] mx-auto">
-      <h1 className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-10 text-center">
-        What would you like to say?
-      </h1>
-
-      <div className="w-full max-w-[905px]">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center mb-10"
+      >
+        <h1 className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-3">
+          Write Your Message
+        </h1>
+        <p className="text-gray-600 text-lg">
+          Or let our AI help you craft the perfect prank
+        </p>
+      </motion.div>
+ 
+      <div className="w-full max-w-[905px] space-y-8">
         {/* Message Input */}
-        <div className="flex flex-col items-end w-full mb-10">
-          <textarea
-            value={message}
-            onChange={(e) => handleChange(e.target.value)}
-            className="w-full min-h-[467px] p-6 rounded-xl border border-black border-solid bg-white bg-opacity-20 shadow-[0px_4px_4px_rgba(9,9,9,0.26)] font-['Consolas']"
-            placeholder="Type your message here."
-          />
-          <div className="mt-2 text-zinc-500">
-            {message.length}/{MAX_CHARS} characters
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full"
+        >
+          <div className="relative">
+            <textarea
+              value={message}
+              onChange={(e) => handleChange(e.target.value)}
+              className="w-full min-h-[467px] p-6 rounded-2xl border border-gray-200 bg-white shadow-sm 
+                         font-['Consolas'] text-lg focus:border-black focus:ring-1 focus:ring-black 
+                         transition-colors resize-none"
+              placeholder="Type your message here."
+            />
+            <div className="absolute bottom-4 right-4 px-3 py-1 bg-gray-50 rounded-full text-sm text-gray-500">
+              {message.length}/{MAX_CHARS}
+            </div>
           </div>
-        </div>
-
-        {/* AI Prompt Input */}
-        <div className="flex flex-col items-end w-full">
-          <textarea
-            value={aiPrompt}
-            onChange={(e) => setAiPrompt(e.target.value)}
-            disabled={message.length > 0}
-            className={`w-full min-h-[182px] p-6 rounded-xl border border-black border-solid bg-white bg-opacity-20 shadow-[0px_4px_4px_rgba(9,9,9,0.26)] font-['Consolas']
-              ${message.length > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-            placeholder={
-              message.length > 0
-                ? 'Clear the message above to use AI generation'
-                : 'Write your prompt here'
-            }
-          />
-          {error && <p className="mt-2 text-red-500">{error}</p>}
-          <button
+        </motion.div>
+ 
+        {/* AI Generation Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="w-full"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <Bot className="w-5 h-5 text-gray-600" />
+            <span className="text-gray-600 font-medium">AI Message Generator</span>
+          </div>
+          
+          <div className="relative">
+            <textarea
+              value={aiPrompt}
+              onChange={(e) => setAiPrompt(e.target.value)}
+              disabled={message.length > 0}
+              className={`w-full min-h-[182px] p-6 rounded-2xl border bg-white transition-all duration-300
+                ${message.length > 0 
+                  ? 'border-gray-100 bg-gray-50 text-gray-400' 
+                  : 'border-gray-200 hover:border-gray-300 focus:border-black focus:ring-1 focus:ring-black'}`}
+              placeholder={
+                message.length > 0
+                  ? 'Clear the message above to use AI generation'
+                  : PROMPT_EXAMPLES[currentExampleIndex]
+              }
+            />
+            {!message.length && !aiPrompt && (
+              <div className="absolute top-3 right-3 px-3 py-1 bg-gray-100 rounded-full">
+                <span className="text-xs text-gray-500">Examples...</span>
+              </div>
+            )}
+          </div>
+ 
+          {error && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="mt-2 p-3 bg-red-50 rounded-xl text-red-600 text-sm"
+            >
+              {error}
+            </motion.div>
+          )}
+ 
+          <motion.button
+            whileHover={!generating && message.length === 0 && aiPrompt.trim() ? { scale: 1.02 } : {}}
+            whileTap={!generating && message.length === 0 && aiPrompt.trim() ? { scale: 0.98 } : {}}
             onClick={generateWithAI}
             disabled={generating || message.length > 0 || !aiPrompt.trim()}
-            className={`mt-4 px-8 py-3 rounded-full border border-black text-xl font-['Consolas'] transition-colors
-              ${
-                generating || message.length > 0 || !aiPrompt.trim()
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-white hover:bg-gray-50'
+            className={`mt-4 px-8 py-3 rounded-full font-['Consolas'] w-full md:w-auto 
+              transition-all flex items-center justify-center gap-2
+              ${generating || message.length > 0 || !aiPrompt.trim()
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-black text-white hover:bg-gray-900'
               }`}
           >
-            {generating ? 'Generating...' : 'Generate with AI'}
-          </button>
-        </div>
-
-        {/* Submit Button */}
-        <button
-          onClick={onSubmit}
-          disabled={loading || !message.trim()}
-          className="mt-8 w-full px-8 py-3 rounded-full border border-black text-xl font-['Consolas'] bg-white hover:bg-gray-50 transition-colors disabled:bg-gray-100 disabled:text-gray-400"
-        >
-          {loading ? 'Sending...' : 'Send Postcard'}
-        </button>
+            {generating ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Crafting your message...</span>
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4" />
+                <span>Generate with AI</span>
+              </>
+            )}
+          </motion.button>
+        </motion.div>
       </div>
     </div>
   );
+ 
 }

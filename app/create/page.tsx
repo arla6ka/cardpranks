@@ -1,10 +1,14 @@
 'use client';
-import { useState, useEffect } from 'react';
+
+import { useState, useEffect, useMemo } from 'react';
 import { RecipientInfoStep } from './steps/RecipientInfoStep';
 import { ReturnAddressStep } from './steps/ReturnAddressStep';
 import { DesignStep } from './steps/DesignStep';
 import { HandwritingStep } from './steps/HandwritingStep';
 import { MessageStep } from './steps/MessageStep';
+import { PaymentStep } from './steps/PaymentStep';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 
 interface FormData {
   recipient: {
@@ -46,19 +50,45 @@ const INITIAL_FORM_DATA: FormData = {
 };
 
 export default function CreatePage() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
+  const [isPaymentComplete, setIsPaymentComplete] = useState(false);
+  const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
 
-  const [formData, setFormData] = useState<FormData>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('postcardForm');
-      return saved ? JSON.parse(saved) : INITIAL_FORM_DATA;
+  useEffect(() => {
+    const saved = localStorage.getItem('postcardForm');
+    if (saved) {
+      setFormData(JSON.parse(saved));
     }
-    return INITIAL_FORM_DATA;
-  });
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('postcardForm', JSON.stringify(formData));
   }, [formData]);
+
+  const isStepValid = (step: number): boolean => {
+    switch (step) {
+      case 0:
+        return Boolean(
+          formData.recipient.firstName &&
+          formData.recipient.lastName &&
+          formData.recipient.street1 &&
+          formData.recipient.city &&
+          formData.recipient.state &&
+          formData.recipient.zip
+        );
+      case 1:
+        return true; // Return address is optional
+      case 2:
+        return Boolean(formData.card?._id);
+      case 3:
+        return Boolean(formData.handwriting?._id);
+      case 4:
+        return Boolean(formData.message.trim());
+      default:
+        return false;
+    }
+  };
 
   const handleSubmit = async () => {
     try {
@@ -93,6 +123,11 @@ export default function CreatePage() {
     }
   };
 
+  const handlePaymentSuccess = () => {
+    setIsPaymentComplete(true);
+    handleSubmit(); // Send postcard after successful payment
+  };
+
   const updateFormSection = (section: keyof FormData, data: any) => {
     setFormData((prev) => {
       const newData = { ...prev, [section]: data };
@@ -101,75 +136,114 @@ export default function CreatePage() {
     });
   };
 
-  return (
-    <main className="min-h-screen bg-white pb-32">
-      <div className="pt-10">
-        {currentStep === 0 && (
+  const goToStep = (step: number) => {
+    // Can't skip forward
+    if (step > currentStep + 1) return;
+
+    // Can't proceed without completing current step
+    if (step > currentStep && !isStepValid(currentStep)) {
+      alert('Please complete all required fields before proceeding.');
+      return;
+    }
+
+    setCurrentStep(step);
+  };
+
+  const StepContent = useMemo(() => {
+    switch (currentStep) {
+      case 0:
+        return (
           <RecipientInfoStep
             initialData={formData.recipient}
             updateData={(data) => updateFormSection('recipient', data)}
             onNext={() => setCurrentStep(1)}
           />
-        )}
-        {currentStep === 1 && (
+        );
+      case 1:
+        return (
           <ReturnAddressStep
             initialData={formData.from}
             updateData={(data) => updateFormSection('from', data)}
             onNext={() => setCurrentStep(2)}
             onBack={() => setCurrentStep(0)}
           />
-        )}
-        {currentStep === 2 && (
+        );
+      case 2:
+        return (
           <DesignStep
             initialData={formData.card?._id || undefined}
             updateData={(data) => updateFormSection('card', { _id: data })}
             onNext={() => setCurrentStep(3)}
             onBack={() => setCurrentStep(1)}
           />
-        )}
-        {currentStep === 3 && (
+        );
+      case 3:
+        return (
           <HandwritingStep
             initialData={formData.handwriting?._id || undefined}
             updateData={(data) => updateFormSection('handwriting', { _id: data })}
             onNext={() => setCurrentStep(4)}
             onBack={() => setCurrentStep(2)}
           />
-        )}
-        {currentStep === 4 && (
+        );
+      case 4:
+        return (
           <MessageStep
             initialData={formData.message}
             updateData={(data) => updateFormSection('message', data)}
+            onNext={() => setCurrentStep(5)}
             onBack={() => setCurrentStep(3)}
-            handleSubmit={handleSubmit}
           />
-        )}
-      </div>
+        );
+      case 5:
+        return (
+          <PaymentStep
+            formData={formData}
+            onBack={() => setCurrentStep(4)}
+            onSuccess={handlePaymentSuccess}
+          />
+        );
+      default:
+        return null;
+    }
+  }, [currentStep, formData]);
+
+  return (
+    <main className="min-h-screen bg-white pb-32">
+      <div className="pt-10">{StepContent}</div>
 
       {/* Fixed Navigation Footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white">
-        <div className="max-w-[1170px] mx-auto px-6">
-          <div className="w-full border-t border-gray-900 border-solid" />
-          <div className="flex justify-between py-6">
-            {currentStep > 0 && (
-              <button
-                onClick={() => setCurrentStep((prev) => prev - 1)}
-                className="px-8 py-3 rounded-full border border-black text-xl font-['Consola'] bg-white hover:bg-gray-50 transition-colors"
-              >
-                Back
-              </button>
-            )}
-            <div className="flex-1" />
-            {currentStep < 4 && (
-              <button
-                onClick={() => setCurrentStep((prev) => prev + 1)}
-                className="px-8 py-3 rounded-full border border-black text-xl font-['Consolas'] bg-white hover:bg-gray-50 transition-colors"
-              >
-                Next
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+      {/* Fixed Navigation Footer */}
+<div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-t border-gray-200">
+  <div className="max-w-[1170px] mx-auto px-6">
+    <div className="flex justify-between items-center h-16">
+      {currentStep > 0 && (
+        <motion.button
+          whileHover={{ x: -5 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => goToStep(currentStep - 1)}
+          className="text-gray-600 hover:text-black transition-colors flex items-center gap-2"
+        >
+          <span className="text-lg">←</span>
+          Back
+        </motion.button>
+      )}
+      <div className="flex-1" />
+      {currentStep < 5 && (
+        <motion.button
+          whileHover={{ x: 5 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => goToStep(currentStep + 1)}
+          disabled={isStepValid(currentStep) === false}
+          className="text-black flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {currentStep === 4 ? 'Proceed to Payment' : 'Next'}
+          <span className="text-lg">→</span>
+        </motion.button>
+      )}
+    </div>
+  </div>
+</div>
     </main>
   );
 }
