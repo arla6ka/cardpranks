@@ -52,8 +52,8 @@ export const DiscountPopup = () => {
               transition={{ delay: 0.2 }}
               className="mb-4 flex items-baseline justify-center gap-3"
             >
-              <span className="text-4xl font-bold">$8.90</span>
-              <span className="text-xl text-gray-500 line-through">$13.00</span>
+              <span className="text-4xl font-bold">$8.98</span>
+              <span className="text-xl text-gray-500 line-through">$14.99</span>
             </motion.div>
  
             <motion.div
