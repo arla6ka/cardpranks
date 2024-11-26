@@ -1,3 +1,4 @@
+// app/create/steps/PaymentStep.tsx
 'use client';
 
 import { useState } from 'react';
@@ -157,16 +158,6 @@ function CheckoutForm({ formData }: { formData: FormData }) {
 }
 
 export function PaymentStep({ formData }: PaymentStepProps) {
-  const [error, setError] = useState<string | null>(null);
-
-  if (error) {
-    return (
-      <div className="text-red-600 bg-red-50 p-4 rounded-lg">
-        {error}
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col items-center px-6 max-w-[917px] mx-auto">
       <h1 className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-4 text-center">
