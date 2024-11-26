@@ -1,7 +1,7 @@
 // app/api/checkout_sessions/route.ts
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { tempDataStore } from '../../lib/tempStore';
+import { storeFormData } from '../../lib/formDataService';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-11-20.acacia',
@@ -18,11 +18,8 @@ export async function POST(req: Request) {
   try {
     const { formData, amount, currency, customerId }: CheckoutSessionData = await req.json();
 
-    // Generate a unique ID for the form data
-    const formDataId = `form_${Date.now()}_${Math.random().toString(36).substring(7)}`;
-
-    // Store the form data first
-    tempDataStore.set(formDataId, formData);
+    // Store form data in MongoDB
+    const formDataId = await storeFormData(formData);
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
@@ -32,12 +29,9 @@ export async function POST(req: Request) {
         enabled: true,
       },
       metadata: {
-        formDataId // Store our generated ID
+        formDataId // Store MongoDB document ID
       }
     });
-
-    console.log('Stored form data with ID:', formDataId);
-    console.log('TempDataStore contents:', [...tempDataStore.entries()]);
 
     return new Response(paymentIntent.client_secret);
   } catch (error) {

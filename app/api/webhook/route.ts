@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { headers } from 'next/headers';
-import { tempDataStore } from '../../lib/tempStore';
+import { getFormData, deleteFormData } from '../../lib/formDataService';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-11-20.acacia',
@@ -38,26 +38,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Webhook Error' }, { status: 400 });
   }
 
-// app/api/webhook/route.ts (relevant part)
-if (event.type === 'payment_intent.succeeded') {
-  const paymentIntent = event.data.object as Stripe.PaymentIntent;
-  
-  // Get form data from tempStore using formDataId from metadata
-  const formDataId = paymentIntent.metadata.formDataId;
-  const formData = tempDataStore.get(formDataId);
-
-  if (!formData) {
-    console.error('Form data not found for ID:', formDataId);
-    console.error('Available keys:', [...tempDataStore.keys()]);
-    return NextResponse.json(
-      { error: `Form data not found for ID: ${formDataId}` },
-      { status: 400 }
-    );
-  }
-
-  // ... rest of the webhook handler remains the same
-
+  if (event.type === 'payment_intent.succeeded') {
+    const paymentIntent = event.data.object as Stripe.PaymentIntent;
+    
     try {
+      // Get form data from MongoDB using the ID from metadata
+      const formData = await getFormData(paymentIntent.metadata.formDataId);
+
+      if (!formData) {
+        throw new Error(`Form data not found for ID: ${paymentIntent.metadata.formDataId}`);
+      }
+
       const requestBody = {
         message: sanitizeText(formData.message),
         handwriting: formData.handwriting._id,
@@ -83,8 +74,6 @@ if (event.type === 'payment_intent.succeeded') {
         } : undefined,
       };
 
-      console.log('Sending to Handwrite:', JSON.stringify(requestBody, null, 2));
-
       const response = await fetch('https://api.handwrite.io/v1/send', {
         method: 'POST',
         headers: {
@@ -99,12 +88,13 @@ if (event.type === 'payment_intent.succeeded') {
       }
 
       // Clean up stored data after successful API call
-      tempDataStore.delete(paymentIntent.id);
+      await deleteFormData(paymentIntent.metadata.formDataId);
       return NextResponse.json({ success: true });
+
     } catch (error) {
-      console.error('Error sending to Handwrite:', error);
+      console.error('Error processing payment:', error);
       return NextResponse.json(
-        { error: 'Failed to send order to Handwrite.io' },
+        { error: 'Failed to process payment' },
         { status: 500 }
       );
     }
