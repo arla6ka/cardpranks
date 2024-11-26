@@ -1,8 +1,7 @@
 export {};
 
 declare global {
-  // eslint-disable-next-line no-var
-  var globalTempStore: Map<any, any>;
+  var globalTempStore: Map<string, any>;
 }
 
 if (!global.globalTempStore) {

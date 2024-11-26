@@ -1,4 +1,3 @@
-// app/api/checkout_sessions/route.ts
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { tempDataStore } from '../../lib/tempStore';
@@ -19,21 +18,20 @@ export async function POST(req: Request) {
       );
     }
 
-    // Store form data temporarily with a unique ID
-    const formDataId = crypto.randomUUID();
-    tempDataStore.set(formDataId, formData);
-
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency,
-      metadata: {
-        formDataId
-      },
       automatic_payment_methods: {
         enabled: true,
       },
-      // Remove phone_number_collection since it's not supported in PaymentIntents
     });
+
+    // Store form data with the payment intent ID
+    tempDataStore.set(paymentIntent.id, formData);
+
+    // Log for debugging
+    console.log('Stored form data with ID:', paymentIntent.id);
+    console.log('TempDataStore contents:', [...tempDataStore.entries()]);
 
     // Return the client secret string directly
     return new Response(paymentIntent.client_secret);

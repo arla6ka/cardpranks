@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { headers } from 'next/headers';
 import { tempDataStore } from '../../lib/tempStore';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -10,19 +11,24 @@ const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 function sanitizeText(text: string): string {
   return text
-    .replace(/—/g, '-') // Replace em dashes with regular dashes
-    .replace(/'/g, "'") // Replace smart quotes with regular quotes
+    .replace(/—/g, '-')
+    .replace(/'/g, "'")
     .replace(/"/g, '"')
     .replace(/"/g, '"')
-    .replace(/…/g, '...') // Replace ellipsis with dots
-    .replace(/[^\x20-\x7E\n]/g, ''); // Remove any non-ASCII characters except newlines
+    .replace(/…/g, '...')
+    .replace(/[^\x20-\x7E\n]/g, '');
 }
 
 export async function POST(req: Request) {
   const payload = await req.text();
-  const sig = req.headers.get('stripe-signature')!;
+  const headerList = await headers();
+  const sig = headerList.get('stripe-signature');
 
-  let event;
+  if (!sig) {
+    return NextResponse.json({ error: 'No signature found' }, { status: 400 });
+  }
+
+  let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
@@ -31,66 +37,83 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Webhook Error' }, { status: 400 });
   }
 
+  // Log the event type and data for debugging
+  console.log('Webhook event type:', event.type);
+  console.log('Event data:', JSON.stringify(event.data, null, 2));
+
   if (event.type === 'payment_intent.succeeded') {
     const paymentIntent = event.data.object as Stripe.PaymentIntent;
-    const formDataId = paymentIntent.metadata.formDataId;
+    
+    // Log the payment intent and metadata
+    console.log('Payment Intent:', paymentIntent.id);
+    console.log('Metadata:', paymentIntent.metadata);
+    console.log('TempDataStore contents:', [...tempDataStore.entries()]);
+
+    // Try both metadata.formDataId and the payment intent ID itself
+    const formDataId = paymentIntent.metadata?.formDataId || paymentIntent.id;
     const formData = tempDataStore.get(formDataId);
 
-    if (formData) {
-      try {
-        // Prepare the request body with sanitized text
-        const requestBody = {
-          message: sanitizeText(formData.message),
-          handwriting: formData.handwriting._id,
-          card: formData.card._id,
-          recipients: [{
-            firstName: sanitizeText(formData.recipient.firstName),
-            lastName: sanitizeText(formData.recipient.lastName),
-            company: formData.recipient.company ? sanitizeText(formData.recipient.company) : undefined,
-            street1: sanitizeText(formData.recipient.street1),
-            street2: formData.recipient.street2 ? sanitizeText(formData.recipient.street2) : undefined,
-            city: sanitizeText(formData.recipient.city),
-            state: sanitizeText(formData.recipient.state),
-            zip: formData.recipient.zip,
-          }],
-          from: formData.from ? {
-            firstName: sanitizeText(formData.from.firstName),
-            lastName: sanitizeText(formData.from.lastName),
-            street1: sanitizeText(formData.from.street1),
-            street2: formData.from.street2 ? sanitizeText(formData.from.street2) : undefined,
-            city: sanitizeText(formData.from.city),
-            state: sanitizeText(formData.from.state),
-            zip: formData.from.zip,
-          } : undefined,
-        };
+    if (!formData) {
+      console.error('Form data not found. Available keys:', [...tempDataStore.keys()]);
+      return NextResponse.json(
+        { error: `Form data not found for ID: ${formDataId}` },
+        { status: 400 }
+      );
+    }
 
-        console.log('Sending to Handwrite:', JSON.stringify(requestBody, null, 2));
+    try {
+      const requestBody = {
+        message: sanitizeText(formData.message),
+        handwriting: formData.handwriting._id,
+        card: formData.card._id,
+        recipients: [{
+          firstName: sanitizeText(formData.recipient.firstName),
+          lastName: sanitizeText(formData.recipient.lastName),
+          company: formData.recipient.company ? sanitizeText(formData.recipient.company) : undefined,
+          street1: sanitizeText(formData.recipient.street1),
+          street2: formData.recipient.street2 ? sanitizeText(formData.recipient.street2) : undefined,
+          city: sanitizeText(formData.recipient.city),
+          state: sanitizeText(formData.recipient.state),
+          zip: formData.recipient.zip,
+        }],
+        from: formData.from ? {
+          firstName: sanitizeText(formData.from.firstName),
+          lastName: sanitizeText(formData.from.lastName),
+          street1: sanitizeText(formData.from.street1),
+          street2: formData.from.street2 ? sanitizeText(formData.from.street2) : undefined,
+          city: sanitizeText(formData.from.city),
+          state: sanitizeText(formData.from.state),
+          zip: formData.from.zip,
+        } : undefined,
+      };
 
-        const response = await fetch('https://api.handwrite.io/v1/send', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': process.env.HANDWRITE_API_KEY || '',
-          },
-          body: JSON.stringify(requestBody),
-        });
+      console.log('Sending to Handwrite:', JSON.stringify(requestBody, null, 2));
 
-        const responseText = await response.text();
-        console.log('Handwrite API Response:', responseText);
+      const response = await fetch('https://api.handwrite.io/v1/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': process.env.HANDWRITE_API_KEY || '',
+        },
+        body: JSON.stringify(requestBody),
+      });
 
-        if (!response.ok) {
-          throw new Error(`Failed to send postcard: ${responseText}`);
-        }
+      const responseData = await response.text();
+      console.log('Handwrite API Response:', responseData);
 
-        tempDataStore.delete(formDataId);
-        return NextResponse.json({ success: true });
-      } catch (error) {
-        console.error('Error sending postcard:', error);
-        return NextResponse.json({ error: String(error) }, { status: 500 });
+      if (!response.ok) {
+        throw new Error(`Handwrite API error: ${responseData}`);
       }
-    } else {
-      console.error('Form data not found for ID:', formDataId);
-      return NextResponse.json({ error: 'Form data not found' }, { status: 400 });
+
+      // Clean up stored data only after successful API call
+      tempDataStore.delete(formDataId);
+      return NextResponse.json({ success: true });
+    } catch (error) {
+      console.error('Error sending to Handwrite:', error);
+      return NextResponse.json(
+        { error: 'Failed to send order to Handwrite.io' },
+        { status: 500 }
+      );
     }
   }
 
