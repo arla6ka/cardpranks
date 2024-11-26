@@ -33,7 +33,8 @@ export async function POST(req: Request) {
       }
     });
 
-    return new Response(paymentIntent.client_secret);
+    // Return the client secret as JSON instead of plain text
+    return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
     console.error('Failed to create payment intent:', error);
     return NextResponse.json(

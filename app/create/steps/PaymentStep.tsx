@@ -56,24 +56,25 @@ function CheckoutForm({ formData }: { formData: FormData }) {
       const { customerId } = await customerResponse.json();
 
       // Create a new payment intent with the customer ID
-      const paymentResponse = await fetch('/api/checkout_sessions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          formData,
-          amount: 51,
-          currency: 'usd',
-          customerId,
-        }),
-      });
+// In your PaymentStep.tsx component, update the createPaymentIntent call
+const paymentResponse = await fetch('/api/checkout_sessions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    formData,
+    amount: 51,
+    currency: 'usd',
+    customerId,
+  }),
+});
 
-      if (!paymentResponse.ok) {
-        throw new Error('Failed to create payment intent');
-      }
+if (!paymentResponse.ok) {
+  throw new Error('Failed to create payment intent');
+}
 
-      const clientSecret = await paymentResponse.text();
+const { clientSecret } = await paymentResponse.json(); // Parse the JSON response
 
       const { error: submitError } = await elements.submit();
       if (submitError) {
