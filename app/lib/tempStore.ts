@@ -8,4 +8,4 @@ if (!global.globalTempStore) {
   global.globalTempStore = new Map();
 }
 
-export const globalTempStore = global.globalTempStore;
+export const tempDataStore = global.globalTempStore;  // Экспортируем с старым именем для обратной совместимости

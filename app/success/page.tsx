@@ -77,7 +77,7 @@ export default function SuccessPage() {
                 Your postcard has been ordered successfully.
               </p>
               <p className="mt-2 text-sm text-gray-500">
-                We'll notify your recipient as soon as it's delivered.
+                Well notify your recipient as soon as it&quot;s delivered.
               </p>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -109,7 +109,7 @@ export default function SuccessPage() {
                 Oops! Something went wrong
               </h2>
               <p className="mt-4 text-gray-600">
-                We couldn't process your payment. Please try again.
+                We couldn&quot;t process your payment. Please try again.
               </p>
               <motion.button
                 whileHover={{ scale: 1.05 }}
