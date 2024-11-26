@@ -48,6 +48,24 @@ function CheckoutForm() {
     setProcessing(true);
 
     try {
+      // First create or retrieve a customer
+      const customerResponse = await fetch('/api/create-customer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          phone,
+        }),
+      });
+
+      if (!customerResponse.ok) {
+        throw new Error('Failed to create customer');
+      }
+
+      const { customerId } = await customerResponse.json();
+
       const { error: submitError } = await elements.submit();
       if (submitError) {
         throw submitError;
@@ -63,7 +81,7 @@ function CheckoutForm() {
               phone
             }
           }
-        },
+        }
       });
 
       if (confirmError) {

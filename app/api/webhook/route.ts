@@ -1,7 +1,7 @@
+// app/api/webhook/route.ts
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { headers } from 'next/headers';
-import { tempDataStore } from '../../lib/tempStore';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-11-20.acacia',
@@ -44,24 +44,10 @@ export async function POST(req: Request) {
   if (event.type === 'payment_intent.succeeded') {
     const paymentIntent = event.data.object as Stripe.PaymentIntent;
     
-    // Log the payment intent and metadata
-    console.log('Payment Intent:', paymentIntent.id);
-    console.log('Metadata:', paymentIntent.metadata);
-    console.log('TempDataStore contents:', [...tempDataStore.entries()]);
-
-    // Try both metadata.formDataId and the payment intent ID itself
-    const formDataId = paymentIntent.metadata?.formDataId || paymentIntent.id;
-    const formData = tempDataStore.get(formDataId);
-
-    if (!formData) {
-      console.error('Form data not found. Available keys:', [...tempDataStore.keys()]);
-      return NextResponse.json(
-        { error: `Form data not found for ID: ${formDataId}` },
-        { status: 400 }
-      );
-    }
-
     try {
+      // Get form data from metadata
+      const formData = JSON.parse(paymentIntent.metadata.formData || '{}');
+
       const requestBody = {
         message: sanitizeText(formData.message),
         handwriting: formData.handwriting._id,
@@ -105,8 +91,6 @@ export async function POST(req: Request) {
         throw new Error(`Handwrite API error: ${responseData}`);
       }
 
-      // Clean up stored data only after successful API call
-      tempDataStore.delete(formDataId);
       return NextResponse.json({ success: true });
     } catch (error) {
       console.error('Error sending to Handwrite:', error);
