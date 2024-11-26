@@ -4,17 +4,18 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Loader2 } from 'lucide-react';
 
-interface DesignStepProps {
- initialData?: string;
- onNext: () => void;
- onBack: () => void;
- updateData: (data: string) => void;
+interface Design {
+  _id: string;
+  name: string;
+  preview_url: string;
+  category: 'christmas' | 'other';
 }
 
-interface Design {
- _id: string;
- name: string;
- preview_url: string;
+interface DesignStepProps {
+  initialData?: string;
+  onNext: () => void;
+  onBack: () => void;
+  updateData: (data: string) => void;
 }
 
 export function DesignStep({ initialData, updateData }: DesignStepProps) {
@@ -68,6 +69,9 @@ export function DesignStep({ initialData, updateData }: DesignStepProps) {
    );
  }
 
+ const christmasDesigns = designs.filter(design => design.category === 'christmas');
+ const otherDesigns = designs.filter(design => design.category === 'other');
+
  return (
    <div className="flex flex-col items-center px-6 max-w-[1344px] mx-auto">
      <motion.div 
@@ -84,47 +88,114 @@ export function DesignStep({ initialData, updateData }: DesignStepProps) {
        </div>
      </motion.div>
 
-     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-       {designs.map((design, index) => (
-         <motion.button
-           key={design._id}
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ delay: index * 0.1 }}
-           onClick={() => handleSelect(design)}
-           className={`
-             group relative rounded-2xl overflow-hidden border-2 transition-all duration-300
-             ${selectedDesign === design._id 
-               ? 'border-black shadow-xl scale-[1.02]' 
-               : 'border-transparent hover:border-gray-200'}
-           `}
-         >
-           <div className="aspect-[1.5] overflow-hidden">
-             <img
-               src={design.preview_url}
-               alt={design.name}
-               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-             />
-           </div>
-           <div 
+     {/* Christmas Designs Section */}
+     <div className="w-full mb-16">
+       <motion.h2 
+         initial={{ opacity: 0, x: -20 }}
+         animate={{ opacity: 1, x: 0 }}
+         className="text-2xl font-medium mb-8 text-center"
+       >
+         <span className="inline-flex items-center gap-2">
+           🎄 Christmas Collection
+         </span>
+       </motion.h2>
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+         {christmasDesigns.map((design, index) => (
+           <motion.button
+             key={design._id}
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ delay: index * 0.1 }}
+             onClick={() => handleSelect(design)}
              className={`
-               absolute bottom-0 left-0 right-0 p-4 transition-all duration-300
-               bg-gradient-to-t from-black/80 to-transparent
-               ${selectedDesign === design._id ? 'h-full flex items-end' : 'h-20'}
+               group relative rounded-2xl overflow-hidden border-2 transition-all duration-300
+               ${selectedDesign === design._id 
+                 ? 'border-black shadow-xl scale-[1.02]' 
+                 : 'border-transparent hover:border-gray-200'}
              `}
            >
-             <p className="text-white text-lg font-medium">{design.name}</p>
-           </div>
-           
-           {selectedDesign === design._id && (
-             <div className="absolute top-4 right-4">
-               <span className="px-3 py-1 bg-black text-white text-sm rounded-full">
-                 Selected
-               </span>
+             <div className="aspect-[1.5] overflow-hidden">
+               <img
+                 src={design.preview_url}
+                 alt={design.name}
+                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+               />
              </div>
-           )}
-         </motion.button>
-       ))}
+             <div 
+               className={`
+                 absolute bottom-0 left-0 right-0 p-4 transition-all duration-300
+                 bg-gradient-to-t from-black/80 to-transparent
+                 ${selectedDesign === design._id ? 'h-full flex items-end' : 'h-20'}
+               `}
+             >
+               <p className="text-white text-lg font-medium">{design.name}</p>
+             </div>
+             
+             {selectedDesign === design._id && (
+               <div className="absolute top-4 right-4">
+                 <span className="px-3 py-1 bg-black text-white text-sm rounded-full">
+                   Selected
+                 </span>
+               </div>
+             )}
+           </motion.button>
+         ))}
+       </div>
+     </div>
+
+     {/* Other Designs Section */}
+     <div className="w-full">
+       <motion.h2 
+         initial={{ opacity: 0, x: -20 }}
+         animate={{ opacity: 1, x: 0 }}
+         className="text-2xl font-medium mb-8 text-center"
+       >
+         <span className="inline-flex items-center gap-2">
+           ✨ Classic Collection
+         </span>
+       </motion.h2>
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+         {otherDesigns.map((design, index) => (
+           <motion.button
+             key={design._id}
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ delay: index * 0.1 }}
+             onClick={() => handleSelect(design)}
+             className={`
+               group relative rounded-2xl overflow-hidden border-2 transition-all duration-300
+               ${selectedDesign === design._id 
+                 ? 'border-black shadow-xl scale-[1.02]' 
+                 : 'border-transparent hover:border-gray-200'}
+             `}
+           >
+             <div className="aspect-[1.5] overflow-hidden">
+               <img
+                 src={design.preview_url}
+                 alt={design.name}
+                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+               />
+             </div>
+             <div 
+               className={`
+                 absolute bottom-0 left-0 right-0 p-4 transition-all duration-300
+                 bg-gradient-to-t from-black/80 to-transparent
+                 ${selectedDesign === design._id ? 'h-full flex items-end' : 'h-20'}
+               `}
+             >
+               <p className="text-white text-lg font-medium">{design.name}</p>
+             </div>
+             
+             {selectedDesign === design._id && (
+               <div className="absolute top-4 right-4">
+                 <span className="px-3 py-1 bg-black text-white text-sm rounded-full">
+                   Selected
+                 </span>
+               </div>
+             )}
+           </motion.button>
+         ))}
+       </div>
      </div>
    </div>
  );

@@ -8,7 +8,7 @@ const faqItems: FAQItemProps[] = [
     answer: "Fast! Cards are typically mailed within 1 business day and delivered over the following 1-3 days."
   },
   {
-    question: "Will they know it&apos;s from me?",
+    question: "Will they know it's from me?",
     answer: "Only if you include your name! All cards are signed as CRDPK to maintain anonymity."
   },  
   {
@@ -17,11 +17,11 @@ const faqItems: FAQItemProps[] = [
   },
   {
     question: "What kind of stationery do you use?",
-    answer: "We use premium, luxurious stationery that &quot;screams&quot; quality to your recipients."
+    answer: "We use premium, luxurious stationery that 'screams' quality to your recipients."
   },
   {
     question: "Can you ship the cards to me?",
-    answer: "Sure! Simply let us know and we&apos;ll deliver them to you, ready to go."
+    answer: "Sure! Simply let us know and we'll deliver them to you, ready to go."
   },
   {
     question: "Can I choose different styles?",

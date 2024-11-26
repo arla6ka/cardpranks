@@ -123,7 +123,7 @@ function CheckoutForm() {
         disabled={!stripe || processing}
         className="w-full px-8 py-3 rounded-full border border-black text-xl font-['Consolas'] bg-white hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {processing ? 'Processing...' : 'Pay $8.90'}
+        {processing ? 'Processing...' : 'Pay $8.98'}
       </button>
     </form>
   );
@@ -143,7 +143,7 @@ export function PaymentStep({ formData }: PaymentStepProps) {
           },
           body: JSON.stringify({
             formData,
-            amount: 890, // Changed to $8.90
+            amount: 898, // Changed to $8.90
             currency: 'usd',
           }),
         });

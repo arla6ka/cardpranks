@@ -27,9 +27,9 @@ export const PricingSection = () => {
             <div className="flex items-baseline gap-4">
               <div className="flex items-baseline">
                 <p className="font-['Almarena_Neue'] text-5xl md:text-7xl">$8</p>
-                <span className="text-2xl">.90</span>
+                <span className="text-2xl">.98</span>
               </div>
-              <span className="text-gray-400 line-through text-2xl">$13.00</span>
+              <span className="text-gray-400 line-through text-2xl">$14.99</span>
             </div>
             <p className="mt-2 text-lg md:text-xl text-gray-600">Limited time offer</p>
           </div>

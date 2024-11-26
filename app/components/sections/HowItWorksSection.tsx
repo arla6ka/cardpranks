@@ -55,8 +55,8 @@ export const HowItWorksSection = () => {
        >
          <div className="max-w-xl mx-auto mb-8 px-6 py-4 bg-gray-50 rounded-2xl">
            <p className="text-gray-600">
-             Limited time offer: Get your prank card for just <span className="text-black font-bold">$8.90</span> 
-             <span className="text-gray-500 line-through ml-2">$13.00</span>
+             Limited time offer: Get your prank card for just <span className="text-black font-bold">$8.98</span> 
+             <span className="text-gray-500 line-through ml-2">$14.99</span>
            </p>
          </div>
          <CreatePostcardButton text="Start Your Prank Postcard Now" />

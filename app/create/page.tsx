@@ -223,7 +223,9 @@ export default function CreatePage() {
               <button
                 onClick={() => goToStep(currentStep + 1)}
                 disabled={!isStepValid(currentStep)}
-                className="text-black flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-black text-white rounded-full flex items-center gap-2 
+                          disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 
+                          transition-colors font-medium"
               >
                 {currentStep === 4 ? 'Proceed to Payment' : 'Next'}
                 <span className="text-lg">→</span>
