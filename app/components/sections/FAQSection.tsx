@@ -20,13 +20,13 @@ const faqItems: FAQItemProps[] = [
     answer: "Sure! Simply let us know and we'll deliver them to you, ready to go."
   },
   {
-    question: "Can I choose different styles?",
-    answer: "Yes! We offer several authentic handwriting styles to make your message more personal and believable."
-  },
-  {
     question: "Will my bank statement show your company’s name?",
     answer: "For your privacy, your bank statement will show a shortened version of our name. This ensure secure and disguised. For billing inquiries, contact us."
   }, 
+  {
+    question: "Can I choose different styles?",
+    answer: "Yes! We offer several authentic handwriting styles to make your message more personal and believable."
+  }
 ];
 
 export const FAQSection = () => {
