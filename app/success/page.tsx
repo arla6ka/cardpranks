@@ -1,12 +1,13 @@
 // app/success/page.tsx
 'use client';
+import { Suspense } from 'react';
 
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
-export default function SuccessPage() {
+function SuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const payment_intent = searchParams.get('payment_intent');
@@ -124,5 +125,12 @@ export default function SuccessPage() {
         )}
       </motion.div>
     </div>
+  );
+}
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SuccessContent />
+    </Suspense>
   );
 }
