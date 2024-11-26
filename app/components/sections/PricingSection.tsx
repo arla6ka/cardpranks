@@ -4,7 +4,7 @@ import { Truck, Clock, ShieldCheck } from 'lucide-react';
 
 export const PricingSection = () => {
    return (
-    <section className=" md:mt-20 w-full px-6 md:px-8 text-center">
+    <section className=" md:mt-20 w-full px-6 md:px-8 text-center" id="pricing">
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}

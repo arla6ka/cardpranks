@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 export const HandwritingExplainer = () => {
     return (
-      <section className="py-20 mt-10">
+      <section className="py-20 mt-10" id="features">
         <div className="max-w-6xl mx-auto px-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -14,7 +14,7 @@ export const HandwritingExplainer = () => {
               Real Robots, Real Writing
             </h2>
             <p className="text-xl text-gray-600">
-              Our proprietary robots use real pens and ink to create authentic handwritten cards
+              Our robots use real pens and ink to create authentic handwritten cards
             </p>
           </motion.div>
    

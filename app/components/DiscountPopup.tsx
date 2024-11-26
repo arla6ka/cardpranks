@@ -1,8 +1,9 @@
 'use client'
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
-
+import { useRouter } from 'next/navigation';
 export const DiscountPopup = () => {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [hasBeenShown, setHasBeenShown] = useState(false);
  
@@ -15,7 +16,11 @@ export const DiscountPopup = () => {
       return () => clearTimeout(timer);
     }
   }, [hasBeenShown]);
- 
+  const handleOrderClick = () => {
+    setIsVisible(false);
+    router.push('/create');
+  };
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -73,10 +78,7 @@ export const DiscountPopup = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  setIsVisible(false);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
+                onClick={handleOrderClick}
                 className="w-full bg-black text-white py-3 px-6 rounded-full font-['Consolas'] hover:bg-gray-800 transition-colors"
               >
                 Order Now

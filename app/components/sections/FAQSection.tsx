@@ -8,12 +8,12 @@ const faqItems: FAQItemProps[] = [
     answer: "Fast! Cards are typically mailed within 1 business day and delivered over the following 1-3 days."
   },
   {
-    question: "Will they know it's from me?",
-    answer: "Only if you include your name! All cards are signed as CRDPK to maintain anonymity."
+    question: "Will my bank statement show your company’s name?",
+    answer: "For your privacy, your bank statement will show a shortened version of our name. This ensures secure transactions. For billing inquiries, contact us directly."
   },  
   {
     question: "How much does it cost?",
-    answer: "Our cards are just $8.90 including postage. For bulk orders, please contact us."
+    answer: "Our cards are just $8.98 including postage. For bulk orders, please contact us."
   },
   {
     question: "What kind of stationery do you use?",
@@ -31,7 +31,7 @@ const faqItems: FAQItemProps[] = [
 
 export const FAQSection = () => {
   return (
-    <section className="mt-2 md:mt-6 w-full px-6 md:px-8">
+    <section className="mt-2 md:mt-6 w-full px-6 md:px-8" id="FAQ">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
