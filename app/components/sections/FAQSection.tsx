@@ -6,11 +6,7 @@ const faqItems: FAQItemProps[] = [
   {
     question: "How quickly do you send out my cards?",
     answer: "Fast! Cards are typically mailed within 1 business day and delivered over the following 1-3 days."
-  },
-  {
-    question: "Will my bank statement show your company’s name?",
-    answer: "For your privacy, your bank statement will show a shortened version of our name. This ensures secure transactions. For billing inquiries, contact us directly."
-  },  
+  }, 
   {
     question: "How much does it cost?",
     answer: "Our cards are just $8.98 including postage. For bulk orders, please contact us."
@@ -26,7 +22,11 @@ const faqItems: FAQItemProps[] = [
   {
     question: "Can I choose different styles?",
     answer: "Yes! We offer several authentic handwriting styles to make your message more personal and believable."
-  }
+  },
+  {
+    question: "Will my bank statement show your company’s name?",
+    answer: "For your privacy, your bank statement will show a shortened version of our name. This ensure secure and disguised. For billing inquiries, contact us."
+  }, 
 ];
 
 export const FAQSection = () => {
