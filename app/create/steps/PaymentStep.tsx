@@ -63,7 +63,7 @@ function CheckoutForm({ formData }: { formData: FormData }) {
         },
         body: JSON.stringify({
           formData,
-          amount: 898,
+          amount: 51,
           currency: 'usd',
           customerId,
         }),
