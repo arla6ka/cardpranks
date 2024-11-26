@@ -10,22 +10,18 @@ const faqItems: FAQItemProps[] = [
   {
     question: "Will they know it&apos;s from me?",
     answer: "Only if you include your name! All cards are signed as CRDPK to maintain anonymity."
-  },
+  },  
   {
     question: "How much does it cost? Do you offer volume discounts?",
-    answer: "Our cards are just $9.00 including postage per card. For bulk orders or special requirements, please contact us."
+    answer: "Our cards are just $8.90 including postage per card. For bulk orders or special requirements, please contact us."
   },
   {
     question: "What kind of stationery card stock do you use?",
-    answer: "We use premium, luxurious stationery that screams \"quality\" to your recipients."
-  },
-  {
-    question: "Will they know it's from me?",
-    answer: "Only if you include your name! Otherwise, we keep your identity a secret."
+    answer: "We use premium, luxurious stationery that &quot;screams&quot; quality to your recipients."
   },
   {
     question: "Can you create the cards and ship them all to me?",
-    answer: "Sure! Simply let us know and we'll deliver them to you, ready to go."
+    answer: "Sure! Simply let us know and we&apos;ll deliver them to you, ready to go."
   },
   {
     question: "Can I choose from different handwriting styles?",

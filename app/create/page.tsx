@@ -89,6 +89,7 @@ export default function CreatePage() {
     }
   };
 
+
   const handleSubmit = useCallback(async () => {
     try {
       const postData = {
@@ -188,17 +189,18 @@ export default function CreatePage() {
             onBack={() => setCurrentStep(3)}
           />
         );
-      case 5:
-        return (
-          <PaymentStep
-            formData={formData}
-            onBack={() => setCurrentStep(4)}
-          />
-        );
-      default:
-        return null;
-    }
-  }, [currentStep, formData]);
+        case 5:
+          return (
+            <PaymentStep
+              formData={formData}
+              onBack={() => setCurrentStep(4)}
+              onSuccess={handleSubmit} // Add this line
+            />
+          );
+        default:
+          return null;
+      }
+    }, [currentStep, formData, handleSubmit]); 
 
   return (
     <main className="min-h-screen bg-white pb-32">

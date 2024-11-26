@@ -27,6 +27,7 @@ interface FormData {
 interface PaymentStepProps {
   formData: FormData;
   onBack: () => void;
+  onSuccess: () => void;
 }
 
 function CheckoutForm() {
