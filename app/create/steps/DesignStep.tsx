@@ -19,7 +19,6 @@ interface CardData {
 interface DesignStepProps {
   initialData?: string;
   updateData: (data: CardData) => void;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNext: () => void; // Keep this prop since it's being passed from CreatePage
 }
 
@@ -36,8 +35,8 @@ export function DesignStep({ initialData, updateData, onNext }: DesignStepProps)
       preview_url: design.preview_url,
       name: design.name
     });
-    // Optionally auto-advance to next step after selection
-    // onNext();
+    // Add auto-advance to next step
+    onNext();
   };
  useEffect(() => {
    const fetchDesigns = async () => {
