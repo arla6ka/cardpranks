@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Loader2 } from 'lucide-react';
-
 interface Design {
   _id: string;
   name: string;
@@ -19,17 +18,26 @@ interface CardData {
 
 interface DesignStepProps {
   initialData?: string;
-  updateData: (data: CardData) => void;  // Changed to accept CardData
-  onNext: () => void;
-  onBack?: () => void;
+  updateData: (data: CardData) => void;
+  onNext: () => void; // Keep this prop since it's being passed from CreatePage
 }
 
-export function DesignStep({ initialData, updateData, onNext, onBack }: DesignStepProps) {
- const [designs, setDesigns] = useState<Design[]>([]);
- const [selectedDesign, setSelectedDesign] = useState<string>(initialData || '');
- const [loading, setLoading] = useState(true);
- const [error, setError] = useState<string | null>(null);
+export function DesignStep({ initialData, updateData, onNext }: DesignStepProps) {
+  const [designs, setDesigns] = useState<Design[]>([]);
+  const [selectedDesign, setSelectedDesign] = useState<string>(initialData || '');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  const handleSelect = (design: Design) => {
+    setSelectedDesign(design._id);
+    updateData({
+      _id: design._id,
+      preview_url: design.preview_url,
+      name: design.name
+    });
+    // Optionally auto-advance to next step after selection
+    // onNext();
+  };
  useEffect(() => {
    const fetchDesigns = async () => {
      try {
@@ -50,15 +58,6 @@ export function DesignStep({ initialData, updateData, onNext, onBack }: DesignSt
    fetchDesigns();
  }, []);
 
-// app/create/steps/DesignStep.tsx
-const handleSelect = (design: Design) => {
-  setSelectedDesign(design._id);
-  updateData({
-    _id: design._id,
-    preview_url: design.preview_url,
-    name: design.name
-  });
-};
  if (loading) {
    return (
      <div className="flex flex-col items-center justify-center min-h-[400px]">
