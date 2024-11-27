@@ -19,6 +19,7 @@ interface CardData {
 interface DesignStepProps {
   initialData?: string;
   updateData: (data: CardData) => void;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNext: () => void; // Keep this prop since it's being passed from CreatePage
 }
 
