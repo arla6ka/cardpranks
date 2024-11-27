@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
 import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline';
 import { CreatePostcardButton } from '../CreatePostcardButton';
+
 export const ContactSection = () => {
   return (
-    <footer className="relative py-24 w-full px-6 overflow-hidden ">
+    <footer className="relative py-24 w-full px-6 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -47,15 +48,30 @@ export const ContactSection = () => {
                 +1 (700) 700 - 7070
               </a>
             </div>
+
+            {/* Legal Links */}
+            <div className="flex items-center gap-4 pt-4">
+              <a 
+                href="https://thunder-lemongrass-2d5.notion.site/Terms-and-Conditions-14b65606281b803fab1eeb6e08b79d11?pvs=4"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 text-xs md:text-sm text-gray-600 hover:text-black transition-colors border border-gray-200 rounded-full hover:border-gray-400"
+              >
+                Terms & Conditions
+              </a>
+              <div className="w-1 h-1 bg-gray-200 rounded-full" />
+              <a 
+                href="https://thunder-lemongrass-2d5.notion.site/Privacy-Policy-14b65606281b809ea8a5d9d6e9824449"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 text-xs md:text-sm text-gray-600 hover:text-black transition-colors border border-gray-200 rounded-full hover:border-gray-400"
+              >
+                Privacy Policy
+              </a>
+            </div>
           </motion.div>
         </motion.div>
- 
-        {/* Background decorative elements */}
-       
       </div>
     </footer>
   );
- };
- 
- // You'll need to import these icons from a library like heroicons
- 
+};

@@ -4,9 +4,10 @@ import { motion } from 'framer-motion';
 import { User, Building2, MapPin } from 'lucide-react';
 
 interface RecipientInfoStepProps {
- initialData?: FormState;
- onNext: () => void;
- updateData: (data: FormState) => void;
+  initialData?: FormState;
+  onNext: () => void;
+  onBack: () => void; // Add onBack
+  updateData: (data: FormState) => void;
 }
 
 interface FormState {

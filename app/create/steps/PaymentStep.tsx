@@ -10,13 +10,146 @@ import {
   useElements
 } from '@stripe/react-stripe-js';
 import type { FormData } from '../../types/form';
-
+import { motion } from 'framer-motion';
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 interface PaymentStepProps {
   formData: FormData;
   onBack: () => void;
   onSuccess: () => void;
+}
+function EnvelopePreview({ formData }: { formData: FormData }) {
+  const [showingFront, setShowingFront] = useState(true);
+
+  return (
+    <div className="w-full max-w-[589px] mb-8">
+      {/* Toggle Buttons */}
+      <div className="flex justify-center gap-4 mb-6">
+        <button
+          onClick={() => setShowingFront(true)}
+          className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+            showingFront 
+              ? 'bg-black text-white' 
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+        >
+          Front
+        </button>
+        <button
+          onClick={() => setShowingFront(false)}
+          className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+            !showingFront 
+              ? 'bg-black text-white' 
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+        >
+          Back
+        </button>
+      </div>
+
+      {/* Envelope Container */}
+      <div className="relative w-full max-w-[589px] aspect-[1.8] mx-auto">
+        {/* Front of envelope */}
+        <motion.div 
+          initial={false}
+          animate={{ 
+            scale: showingFront ? 1 : 0.95,
+            opacity: showingFront ? 1 : 0,
+            zIndex: showingFront ? 1 : 0 
+          }}
+          transition={{ duration: 0.3 }}
+          className="absolute inset-0 bg-white rounded-xl shadow-lg overflow-hidden"
+        >
+          <div className="p-8 h-full relative">
+            {/* Return Address */}
+            <div className="text-sm text-gray-600">
+              {formData.from ? (
+                <>
+                  {formData.from.firstName} {formData.from.lastName}
+                  <br />
+                  {formData.from.street1}
+                  {formData.from.street2 && <><br />{formData.from.street2}</>}
+                  <br />
+                  {formData.from.city}, {formData.from.state} {formData.from.zip}
+                </>
+              ) : (
+                <span className="text-gray-400 italic">No return address</span>
+              )}
+            </div>
+
+            {/* Stamp */}
+            <div className="absolute top-8 right-8 w-16 h-16 bg-red-30 rounded-sm flex items-center justify-center border border-red-50">
+              <div className="w-20 h-20 relative overflow-hidden">
+                <img 
+                  src="/usa-stamp.png" 
+                  alt="US Postage"
+                  className="w-full h-full object-contain"
+                  onError={(e) => {
+                    e.currentTarget.parentElement!.innerHTML = 'STAMP';
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Recipient Address */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+              <div className="text-black font-['Consolas'] space-y-1">
+                {formData.recipient.firstName} {formData.recipient.lastName}
+                <br />
+                {formData.recipient.street1}
+                {formData.recipient.street2 && <><br />{formData.recipient.street2}</>}
+                <br />
+                {formData.recipient.city}, {formData.recipient.state} {formData.recipient.zip}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Back of envelope */}
+        {/* Back of envelope */}
+<motion.div 
+  initial={false}
+  animate={{ 
+    scale: !showingFront ? 1 : 0.95,
+    opacity: !showingFront ? 1 : 0,
+    zIndex: !showingFront ? 1 : 0 
+  }}
+  transition={{ duration: 0.3 }}
+  className="absolute inset-0 bg-white rounded-xl shadow-lg overflow-hidden"
+>
+  {formData.card?.preview_url && (
+    <div className="absolute inset-0 w-full h-full">
+      <img 
+        src={formData.card.preview_url}
+        alt={formData.card.name || "Card design"}
+        className="w-full h-full object-fill rounded-xl"
+        style={{
+          objectFit: 'cover',
+          width: '100%',
+          height: '100%',
+          display: 'block'
+        }}
+      />
+    </div>
+  )}
+  
+  {/* Envelope Flap Shadow */}
+  <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black/5 to-transparent" />
+  
+  {/* Center Design Label */}
+  {!formData.card?.preview_url && (
+    <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+      <span>Selected Design Preview</span>
+    </div>
+  )}
+</motion.div>
+      </div>
+
+      <div className="text-center mt-4 text-sm text-gray-500">
+        Click buttons above to view front and back
+      </div>
+    </div>
+  );
 }
 
 function CheckoutForm({ formData }: { formData: FormData }) {
@@ -167,7 +300,7 @@ export function PaymentStep({ formData }: PaymentStepProps) {
       <p className="text-gray-600 text-lg mb-10">
         Secure payment powered by Stripe
       </p>
-
+      <EnvelopePreview formData={formData} />
       <div className="w-full max-w-[589px] p-6 rounded-xl border border-black border-solid bg-white bg-opacity-20 shadow-[0px_4px_4px_rgba(9,9,9,0.26)]">
         <Elements
           stripe={stripePromise}

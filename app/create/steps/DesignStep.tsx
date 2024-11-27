@@ -11,14 +11,20 @@ interface Design {
   category: 'christmas' | 'other';
 }
 
-interface DesignStepProps {
-  initialData?: string;
-  onNext: () => void;
-  onBack: () => void;
-  updateData: (data: string) => void;
+interface CardData {
+  _id: string;
+  preview_url: string;
+  name: string;
 }
 
-export function DesignStep({ initialData, updateData }: DesignStepProps) {
+interface DesignStepProps {
+  initialData?: string;
+  updateData: (data: CardData) => void;  // Changed to accept CardData
+  onNext: () => void;
+  onBack?: () => void;
+}
+
+export function DesignStep({ initialData, updateData, onNext, onBack }: DesignStepProps) {
  const [designs, setDesigns] = useState<Design[]>([]);
  const [selectedDesign, setSelectedDesign] = useState<string>(initialData || '');
  const [loading, setLoading] = useState(true);
@@ -44,11 +50,15 @@ export function DesignStep({ initialData, updateData }: DesignStepProps) {
    fetchDesigns();
  }, []);
 
- const handleSelect = (design: Design) => {
-   setSelectedDesign(design._id);
-   updateData(design._id);
- };
-
+// app/create/steps/DesignStep.tsx
+const handleSelect = (design: Design) => {
+  setSelectedDesign(design._id);
+  updateData({
+    _id: design._id,
+    preview_url: design.preview_url,
+    name: design.name
+  });
+};
  if (loading) {
    return (
      <div className="flex flex-col items-center justify-center min-h-[400px]">

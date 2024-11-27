@@ -43,7 +43,13 @@ export default function CreatePage() {
 
   const isStepValid = (step: number): boolean => {
     switch (step) {
-      case 0:
+      case 0: // Design
+        return Boolean(formData.card);
+      case 1: // Handwriting
+        return Boolean(formData.handwriting);
+      case 2: // Message
+        return Boolean(formData.message.trim());
+      case 3: // Recipient Info
         return Boolean(
           formData.recipient.firstName &&
           formData.recipient.lastName &&
@@ -52,14 +58,8 @@ export default function CreatePage() {
           formData.recipient.state &&
           formData.recipient.zip
         );
-      case 1:
+      case 4: // Return Address
         return true; // Return address is optional
-      case 2:
-        return Boolean(formData.card);
-      case 3:
-        return Boolean(formData.handwriting);
-      case 4:
-        return Boolean(formData.message.trim());
       default:
         return false;
     }
@@ -119,64 +119,67 @@ export default function CreatePage() {
     setCurrentStep(step);
   };
 
-  const StepContent = useMemo(() => {
-    switch (currentStep) {
-      case 0:
-        return (
-          <RecipientInfoStep
-            initialData={formData.recipient}
-            updateData={(data) => updateFormSection('recipient', data)}
-            onNext={() => setCurrentStep(1)}
-          />
-        );
-      case 1:
-        return (
-          <ReturnAddressStep
-            initialData={formData.from}
-            updateData={(data) => updateFormSection('from', data)}
-            onNext={() => setCurrentStep(2)}
-            onBack={() => setCurrentStep(0)}
-          />
-        );
-      case 2:
-        return (
-          <DesignStep
-            initialData={formData.card?._id}
-            updateData={(data) => updateFormSection('card', { _id: data })}
-            onNext={() => setCurrentStep(3)}
-            onBack={() => setCurrentStep(1)}
-          />
-        );
-      case 3:
-        return (
-          <HandwritingStep
-            initialData={formData.handwriting?._id}
-            updateData={(data) => updateFormSection('handwriting', { _id: data })}
-            onNext={() => setCurrentStep(4)}
-            onBack={() => setCurrentStep(2)}
-          />
-        );
-      case 4:
-        return (
-          <MessageStep
-            initialData={formData.message}
-            updateData={(data) => updateFormSection('message', data)}
-            onNext={() => setCurrentStep(5)}
-            onBack={() => setCurrentStep(3)}
-          />
-        );
-        case 5:
-          return (
-            <PaymentStep
-              formData={formData}
-              onBack={() => setCurrentStep(4)}
-              onSuccess={handleSubmit} // Add this line
-            />
-          );
-        default:
-          return null;
-      }
-    }, [currentStep, formData, handleSubmit]); 
+// app/create/page.tsx
+// app/create/page.tsx
+const StepContent = useMemo(() => {
+  switch (currentStep) {
+    case 0: // Design
+      return (
+        // CreatePage.tsx
+<DesignStep
+  initialData={formData.card?._id}
+  updateData={(data) => updateFormSection('card', data)}
+  onNext={() => setCurrentStep(1)}
+/>
+      );
+    case 1: // Handwriting
+      return (
+        <HandwritingStep
+          initialData={formData.handwriting?._id}
+          updateData={(data) => updateFormSection('handwriting', { _id: data })}
+          onNext={() => setCurrentStep(2)}
+          onBack={() => setCurrentStep(0)}
+        />
+      );
+    case 2: // Message
+      return (
+        <MessageStep
+          initialData={formData.message}
+          updateData={(data) => updateFormSection('message', data)}
+          onNext={() => setCurrentStep(3)}
+          onBack={() => setCurrentStep(1)}
+        />
+      );
+    case 3: // Recipient Info
+      return (
+        <RecipientInfoStep
+          initialData={formData.recipient}
+          updateData={(data) => updateFormSection('recipient', data)}
+          onNext={() => setCurrentStep(4)}
+          onBack={() => setCurrentStep(2)}
+        />
+      );
+    case 4: // Return Address
+      return (
+        <ReturnAddressStep
+          initialData={formData.from}
+          updateData={(data) => updateFormSection('from', data)}
+          onNext={() => setCurrentStep(5)}
+          onBack={() => setCurrentStep(3)}
+        />
+      );
+    case 5: // Payment
+      return (
+        <PaymentStep
+          formData={formData}
+          onBack={() => setCurrentStep(4)}
+          onSuccess={handleSubmit}
+        />
+      );
+    default:
+      return null;
+  }
+}, [currentStep, formData, handleSubmit]);
 
   return (
     <main className="min-h-screen bg-white pb-32">

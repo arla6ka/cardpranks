@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 export const HandwritingExplainer = () => {
     return (
-      <section className="py-20 mt-10" id="features">
+      <section className="py-20 mt-10">
         <div className="max-w-6xl mx-auto px-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}

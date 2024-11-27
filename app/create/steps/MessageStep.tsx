@@ -30,8 +30,15 @@ export function MessageStep({ initialData, updateData}: MessageStepProps) {
   const [generating, setGenerating] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [currentExampleIndex, setCurrentExampleIndex] = useState(0);
+  const MIN_CHARS = 10;
   const MAX_CHARS = 400;
 
+  const handleChange = (value: string) => {
+    if (value.length <= MAX_CHARS) {
+      setMessage(value);
+      updateData(value);
+    }
+  };
   useEffect(() => {
     if (initialData) {
       setMessage(initialData);
@@ -49,12 +56,7 @@ export function MessageStep({ initialData, updateData}: MessageStepProps) {
     return () => clearInterval(interval);
   }, [message.length]);
 
-  const handleChange = (value: string) => {
-    if (value.length <= MAX_CHARS) {
-      setMessage(value);
-      updateData(value);
-    }
-  };
+
 
   const generateWithAI = async () => {
     if (!aiPrompt.trim()) return;
@@ -113,13 +115,18 @@ export function MessageStep({ initialData, updateData}: MessageStepProps) {
             <textarea
               value={message}
               onChange={(e) => handleChange(e.target.value)}
-              className="w-full min-h-[467px] p-6 rounded-2xl border border-gray-200 bg-white shadow-sm 
+              className={`w-full min-h-[467px] p-6 rounded-2xl border bg-white shadow-sm 
                          font-['Consolas'] text-lg focus:border-black focus:ring-1 focus:ring-black 
-                         transition-colors resize-none"
-              placeholder="Type your message here."
+                         transition-colors resize-none
+                         ${message.length < MIN_CHARS ? 'border-red-200' : 'border-gray-200'}`}
+              placeholder="Type your message here (minimum 10 characters)."
             />
-            <div className="absolute bottom-4 right-4 px-3 py-1 bg-gray-50 rounded-full text-sm text-gray-500">
-              {message.length}/{MAX_CHARS}
+            <div className={`absolute bottom-4 right-4 px-3 py-1 ${
+              message.length < MIN_CHARS ? 'bg-red-50 text-red-500' : 'bg-gray-50 text-gray-500'
+            } rounded-full text-sm`}>
+              {message.length < MIN_CHARS ? 
+                `${MIN_CHARS - message.length} more characters needed` : 
+                `${message.length}/${MAX_CHARS}`}
             </div>
           </div>
         </motion.div>
