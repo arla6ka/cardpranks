@@ -59,7 +59,14 @@ export default function CreatePage() {
           formData.recipient.zip
         );
       case 4: // Return Address
-        return true; // Return address is optional
+        return Boolean(
+          formData.from?.firstName &&
+          formData.from?.lastName &&
+          formData.from?.street1 &&
+          formData.from?.city &&
+          formData.from?.state &&
+          formData.from?.zip
+        );
       default:
         return false;
     }

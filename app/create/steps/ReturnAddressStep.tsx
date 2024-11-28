@@ -25,6 +25,7 @@ interface FormState {
 interface FormField {
  label: string;
  id: string;
+ required?: boolean;
 }
 
 interface FormSection {
@@ -38,8 +39,8 @@ const formSections: FormSection[] = [
    title: 'Personal Information',
    icon: User,
    fields: [
-     { label: 'First Name', id: 'firstName' },
-     { label: 'Last Name', id: 'lastName' },
+     { label: 'First Name', id: 'firstName', required: true },
+     { label: 'Last Name', id: 'lastName', required: true },
    ]
  },
  {
@@ -53,16 +54,16 @@ const formSections: FormSection[] = [
    title: 'Address',
    icon: MapPin,
    fields: [
-     { label: 'Address Line 1', id: 'street1' },
+     { label: 'Address Line 1', id: 'street1', required: true },
      { label: 'Address Line 2', id: 'street2' },
-     { label: 'City', id: 'city' },
-     { label: 'State', id: 'state' },
-     { label: 'Zip Code', id: 'zip' },
+     { label: 'City', id: 'city', required: true },
+     { label: 'State', id: 'state', required: true },
+     { label: 'Zip Code', id: 'zip', required: true },
    ]
  }
 ];
 
-export function ReturnAddressStep({ initialData, updateData }: ReturnAddressStepProps) {
+export function ReturnAddressStep({ initialData, updateData, onNext, onBack }: ReturnAddressStepProps) {
  const [formState, setFormState] = useState<FormState>({
    firstName: '',
    lastName: '',
@@ -100,15 +101,24 @@ export function ReturnAddressStep({ initialData, updateData }: ReturnAddressStep
        Return Address Information
      </motion.h1>
      
-     <motion.div
+     <motion.p 
        initial={{ opacity: 0 }}
        animate={{ opacity: 1 }}
        transition={{ delay: 0.2 }}
-       className="flex items-center gap-2 text-gray-600 mb-10 bg-blue-50 px-4 py-2 rounded-full"
+       className="text-gray-600 text-lg mb-4 text-center"
+     >
+       Tell us who's sending this prank postcard
+     </motion.p>
+     
+     <motion.div
+       initial={{ opacity: 0 }}
+       animate={{ opacity: 1 }}
+       transition={{ delay: 0.3 }}
+       className="flex items-center gap-2 text-gray-600 mb-10 bg-red-50 px-4 py-2 rounded-full"
      >
        <Info className="w-4 h-4" />
        <p className="text-sm">
-         Optional: Leave blank to keep your identity secret
+         You're welcome to use any address that fits the spirit of the prank!
        </p>
      </motion.div>
 
@@ -134,12 +144,14 @@ export function ReturnAddressStep({ initialData, updateData }: ReturnAddressStep
                    className="block text-sm font-medium text-gray-700"
                  >
                    {field.label}
+                   {field.required && <span className="text-red-500 ml-1">*</span>}
                  </label>
                  <input
                    id={field.id}
                    type="text"
                    value={formState[field.id] || ''}
                    onChange={(e) => handleChange(field.id, e.target.value)}
+                   required={field.required}
                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 
                             focus:border-black focus:ring-1 focus:ring-black transition-colors
                             placeholder-gray-400 text-gray-900"

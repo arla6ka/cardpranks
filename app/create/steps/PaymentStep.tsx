@@ -19,43 +19,98 @@ interface PaymentStepProps {
   onSuccess: () => void;
 }
 function EnvelopePreview({ formData }: { formData: FormData }) {
-  const [showingFront, setShowingFront] = useState(true);
+  const [view, setView] = useState<'front' | 'back' | 'envelope'>('front');
 
   return (
     <div className="w-full max-w-[589px] mb-8">
       {/* Toggle Buttons */}
       <div className="flex justify-center gap-4 mb-6">
         <button
-          onClick={() => setShowingFront(true)}
+          onClick={() => setView('front')}
           className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-            showingFront 
+            view === 'front' 
               ? 'bg-black text-white' 
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          Front
+          Message
         </button>
         <button
-          onClick={() => setShowingFront(false)}
+          onClick={() => setView('back')}
           className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-            !showingFront 
+            view === 'back' 
               ? 'bg-black text-white' 
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          Back
+          Design
+        </button>
+        <button
+          onClick={() => setView('envelope')}
+          className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+            view === 'envelope' 
+              ? 'bg-black text-white' 
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+        >
+          Envelope
         </button>
       </div>
 
-      {/* Envelope Container */}
+      {/* Preview Container */}
       <div className="relative w-full max-w-[589px] aspect-[1.8] mx-auto">
-        {/* Front of envelope */}
+        {/* Message Front */}
         <motion.div 
           initial={false}
           animate={{ 
-            scale: showingFront ? 1 : 0.95,
-            opacity: showingFront ? 1 : 0,
-            zIndex: showingFront ? 1 : 0 
+            scale: view === 'front' ? 1 : 0.95,
+            opacity: view === 'front' ? 1 : 0,
+            zIndex: view === 'front' ? 1 : 0 
+          }}
+          transition={{ duration: 0.3 }}
+          className="absolute inset-0 bg-white rounded-xl shadow-lg overflow-hidden p-8"
+        >
+          <div className="h-full flex items-center justify-center">
+            <p className="text-gray-800 font-['Consolas'] text-xs md:text-sm whitespace-pre-wrap text-left">
+              {formData.message}
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Design Back */}
+        <motion.div 
+          initial={false}
+          animate={{ 
+            scale: view === 'back' ? 1 : 0.95,
+            opacity: view === 'back' ? 1 : 0,
+            zIndex: view === 'back' ? 1 : 0 
+          }}
+          transition={{ duration: 0.3 }}
+          className="absolute inset-0 bg-white rounded-xl shadow-lg overflow-hidden"
+        >
+          {formData.card?.preview_url && (
+            <div className="absolute inset-0 w-full h-full">
+              <img 
+                src={formData.card.preview_url}
+                alt={formData.card.name || "Card design"}
+                className="w-full h-full object-cover rounded-xl"
+              />
+            </div>
+          )}
+          {!formData.card?.preview_url && (
+            <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+              <span>Selected Design Preview</span>
+            </div>
+          )}
+        </motion.div>
+
+        {/* Envelope */}
+        <motion.div 
+          initial={false}
+          animate={{ 
+            scale: view === 'envelope' ? 1 : 0.95,
+            opacity: view === 'envelope' ? 1 : 0,
+            zIndex: view === 'envelope' ? 1 : 0 
           }}
           transition={{ duration: 0.3 }}
           className="absolute inset-0 bg-white rounded-xl shadow-lg overflow-hidden"
@@ -104,49 +159,10 @@ function EnvelopePreview({ formData }: { formData: FormData }) {
             </div>
           </div>
         </motion.div>
-
-        {/* Back of envelope */}
-        {/* Back of envelope */}
-<motion.div 
-  initial={false}
-  animate={{ 
-    scale: !showingFront ? 1 : 0.95,
-    opacity: !showingFront ? 1 : 0,
-    zIndex: !showingFront ? 1 : 0 
-  }}
-  transition={{ duration: 0.3 }}
-  className="absolute inset-0 bg-white rounded-xl shadow-lg overflow-hidden"
->
-  {formData.card?.preview_url && (
-    <div className="absolute inset-0 w-full h-full">
-      <img 
-        src={formData.card.preview_url}
-        alt={formData.card.name || "Card design"}
-        className="w-full h-full object-fill rounded-xl"
-        style={{
-          objectFit: 'cover',
-          width: '100%',
-          height: '100%',
-          display: 'block'
-        }}
-      />
-    </div>
-  )}
-  
-  {/* Envelope Flap Shadow */}
-  <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black/5 to-transparent" />
-  
-  {/* Center Design Label */}
-  {!formData.card?.preview_url && (
-    <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-      <span>Selected Design Preview</span>
-    </div>
-  )}
-</motion.div>
       </div>
 
       <div className="text-center mt-4 text-sm text-gray-500">
-        Click buttons above to view front and back
+        Click buttons above to preview your postcard and envelope
       </div>
     </div>
   );
@@ -197,7 +213,7 @@ const paymentResponse = await fetch('/api/checkout_sessions', {
   },
   body: JSON.stringify({
     formData,
-    amount: 51,
+    amount: 898,
     currency: 'usd',
     customerId,
   }),

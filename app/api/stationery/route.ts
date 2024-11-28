@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const API_KEY = 'test_hw_d7137b5df0029b8602c2';
+const API_KEY = process.env.HANDWRITE_API_KEY!;
 interface StationeryDesign {
   _id: string;
   name: string;
