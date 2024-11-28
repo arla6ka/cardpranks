@@ -1,13 +1,14 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Loader2, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
+import { HANDWRITINGS } from '@/app/lib/constants/handwritings';
 
 interface HandwritingStepProps {
   initialData?: string;
+  updateData: (data: string) => void;
   onNext: () => void;
   onBack: () => void;
-  updateData: (data: string) => void;
 }
 
 interface HandwritingStyle {
@@ -16,51 +17,13 @@ interface HandwritingStyle {
   preview_url: string;
 }
 
-export function HandwritingStep({ initialData, updateData }: HandwritingStepProps) {
-  const [styles, setStyles] = useState<HandwritingStyle[]>([]);
+export function HandwritingStep({ initialData, updateData, onNext, onBack }: HandwritingStepProps) {
   const [selectedStyle, setSelectedStyle] = useState<string>(initialData || '');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchStyles = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('/api/handwriting');
-        if (!response.ok) {
-          throw new Error('Failed to fetch handwriting styles');
-        }
-        const data: HandwritingStyle[] = await response.json();
-        setStyles(data);
-      } catch (error) {
-        setError(error instanceof Error ? error.message : 'Failed to load handwriting styles');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStyles();
-  }, []);
 
   const handleSelect = (style: HandwritingStyle) => {
     setSelectedStyle(style._id);
     updateData(style._id);
   };
-
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-gray-400 animate-spin" />
-        <p className="mt-4 text-gray-600">Loading handwriting styles...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="text-center p-4 text-red-500">Error: {error}</div>
-    );
-  }
 
   return (
     <div className="flex flex-col items-center px-6 max-w-[1344px] mx-auto">
@@ -116,7 +79,7 @@ export function HandwritingStep({ initialData, updateData }: HandwritingStepProp
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {styles.map((style, index) => (
+        {HANDWRITINGS.map((style, index) => (
           <motion.button
             key={style._id}
             initial={{ opacity: 0, y: 20 }}

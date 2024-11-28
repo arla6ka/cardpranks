@@ -82,6 +82,8 @@ export function RecipientInfoStep({ initialData, updateData }: RecipientInfoStep
    libraries: ['places'],
  });
 
+ const [isAddressAutofilled, setIsAddressAutofilled] = useState(false);
+
  useEffect(() => {
    if (isLoaded && window.google) {
      const addressInput = document.getElementById('street1');
@@ -123,16 +125,21 @@ export function RecipientInfoStep({ initialData, updateData }: RecipientInfoStep
            newFormState.street1 = `${streetNumber} ${route}`.trim();
            setFormState(newFormState);
            updateData(newFormState);
+           setIsAddressAutofilled(true);
          }
        });
      }
    }
  }, [isLoaded, formState, updateData]);
 
- const handleChange = (field: string, value: string) => { // Changed from keyof FormState to string
+ const handleChange = (field: string, value: string) => {
    const newState = { ...formState, [field]: value };
    setFormState(newState as FormState);
    updateData(newState as FormState);
+   
+   if (field === 'street1' && value === '') {
+     setIsAddressAutofilled(false);
+   }
  };
 
  return (
@@ -183,11 +190,26 @@ export function RecipientInfoStep({ initialData, updateData }: RecipientInfoStep
                    value={formState[field.id] || ''}
                    onChange={(e) => handleChange(field.id, e.target.value)}
                    required={field.required}
-                   className="w-full px-4 py-2.5 rounded-xl border border-gray-200 
-                            focus:border-black focus:ring-1 focus:ring-black transition-colors
-                            placeholder-gray-400 text-gray-900"
+                   disabled={isAddressAutofilled && 
+                     field.id !== 'street1' && 
+                     (field.id === 'city' || field.id === 'state' || field.id === 'zip') &&
+                     formState.street1 !== ''}
+                   className={`w-full px-4 py-2.5 rounded-xl border 
+                             ${isAddressAutofilled && field.id !== 'street1' && 
+                               (field.id === 'city' || field.id === 'state' || field.id === 'zip') &&
+                               formState.street1 !== ''
+                               ? 'bg-gray-100 cursor-not-allowed' 
+                               : 'border-gray-200 focus:border-black focus:ring-1 focus:ring-black'} 
+                             transition-colors placeholder-gray-400 text-gray-900`}
                    placeholder={`Enter ${field.label.toLowerCase()}`}
                  />
+                 {isAddressAutofilled && field.id !== 'street1' && 
+                  (field.id === 'city' || field.id === 'state' || field.id === 'zip') &&
+                  formState.street1 !== '' && (
+                   <p className="text-sm text-gray-500 mt-1">
+                     This field was auto-filled from the selected address
+                   </p>
+                 )}
                </div>
              ))}
            </div>

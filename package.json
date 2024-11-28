@@ -17,6 +17,7 @@
     "@types/stripe": "^8.0.416",
     "@vercel/analytics": "^1.4.1",
     "clsx": "^2.1.1",
+    "dotenv": "^16.4.5",
     "framer-motion": "^11.11.17",
     "lucide-react": "^0.461.0",
     "mongodb": "^6.11.0",
@@ -36,6 +37,7 @@
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
