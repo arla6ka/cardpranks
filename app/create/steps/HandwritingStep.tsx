@@ -7,8 +7,6 @@ import { HANDWRITINGS } from '@/app/lib/constants/handwritings';
 interface HandwritingStepProps {
   initialData?: string;
   updateData: (data: string) => void;
-  onNext: () => void;
-  onBack: () => void;
 }
 
 interface HandwritingStyle {
@@ -17,7 +15,7 @@ interface HandwritingStyle {
   preview_url: string;
 }
 
-export function HandwritingStep({ initialData, updateData, onNext, onBack }: HandwritingStepProps) {
+export function HandwritingStep({ initialData, updateData }: HandwritingStepProps) {
   const [selectedStyle, setSelectedStyle] = useState<string>(initialData || '');
 
   const handleSelect = (style: HandwritingStyle) => {
