@@ -5,8 +5,6 @@ import { User, Building2, MapPin, Info } from 'lucide-react';
 
 interface ReturnAddressStepProps {
  initialData?: FormState;
- onNext: () => void;
- onBack: () => void;
  updateData: (data: FormState) => void;
 }
 
@@ -63,7 +61,7 @@ const formSections: FormSection[] = [
  }
 ];
 
-export function ReturnAddressStep({ initialData, updateData, onNext, onBack }: ReturnAddressStepProps) {
+export function ReturnAddressStep({ initialData, updateData }: ReturnAddressStepProps) {
  const [formState, setFormState] = useState<FormState>({
    firstName: '',
    lastName: '',
@@ -96,7 +94,7 @@ export function ReturnAddressStep({ initialData, updateData, onNext, onBack }: R
      <motion.h1 
        initial={{ opacity: 0, y: -20 }}
        animate={{ opacity: 1, y: 0 }}
-       className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-4 text-center"
+       className="font-[&quot;Almarena_Neue&quot;] text-4xl md:text-6xl mb-4 text-center"
      >
        Return Address Information
      </motion.h1>
@@ -107,7 +105,7 @@ export function ReturnAddressStep({ initialData, updateData, onNext, onBack }: R
        transition={{ delay: 0.2 }}
        className="text-gray-600 text-lg mb-4 text-center"
      >
-       Tell us who's sending this prank postcard
+       Tell us who&apos;s sending this prank postcard
      </motion.p>
      
      <motion.div
@@ -118,7 +116,7 @@ export function ReturnAddressStep({ initialData, updateData, onNext, onBack }: R
      >
        <Info className="w-4 h-4" />
        <p className="text-sm">
-         You're welcome to use any address that fits the spirit of the prank!
+         You&apos;re welcome to use any address that fits the spirit of the prank!
        </p>
      </motion.div>
 

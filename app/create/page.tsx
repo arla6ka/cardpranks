@@ -171,8 +171,6 @@ const StepContent = useMemo(() => {
         <ReturnAddressStep
           initialData={formData.from}
           updateData={(data) => updateFormSection('from', data)}
-          onNext={() => setCurrentStep(5)}
-          onBack={() => setCurrentStep(3)}
         />
       );
     case 5: // Payment
