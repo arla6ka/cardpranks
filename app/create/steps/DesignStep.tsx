@@ -35,8 +35,6 @@ export function DesignStep({ initialData, updateData, onNext }: DesignStepProps)
       preview_url: design.preview_url,
       name: design.name
     });
-    // Add auto-advance to next step
-    onNext();
   };
  useEffect(() => {
    const fetchDesigns = async () => {
@@ -206,6 +204,8 @@ export function DesignStep({ initialData, updateData, onNext }: DesignStepProps)
          ))}
        </div>
      </div>
+
+     
    </div>
  );
 }

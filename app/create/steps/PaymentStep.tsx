@@ -313,16 +313,23 @@ export function PaymentStep({ formData }: PaymentStepProps) {
       <h1 className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-4 text-center">
         Complete Your Payment
       </h1>
-      <p className="text-gray-600 text-lg mb-10">
-        Secure payment powered by Stripe
-      </p>
+      <div className="flex items-center gap-1 text-gray-600 text-lg mb-10">
+        <span>Secure payment powered by</span>
+        <div className="flex items-center gap-0">
+          <img 
+            src="/stripe.png" 
+            alt="Stripe" 
+            className="h-[100px] ml-[-10px] w-[100px] object-contain"
+          />
+        </div>
+      </div>
       <EnvelopePreview formData={formData} />
       <div className="w-full max-w-[589px] p-6 rounded-xl border border-black border-solid bg-white bg-opacity-20 shadow-[0px_4px_4px_rgba(9,9,9,0.26)]">
         <Elements
           stripe={stripePromise}
           options={{
             mode: 'payment',
-            amount: 51,
+            amount: 898,
             currency: 'usd',
             appearance: {
               theme: 'stripe',

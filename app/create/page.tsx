@@ -123,6 +123,7 @@ export default function CreatePage() {
       return;
     }
 
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     setCurrentStep(step);
   };
 

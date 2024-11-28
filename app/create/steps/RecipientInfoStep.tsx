@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { User, Building2, MapPin } from 'lucide-react';
+import { useLoadScript } from '@react-google-maps/api';
 
 interface RecipientInfoStepProps {
   initialData?: FormState;
@@ -76,14 +77,57 @@ export function RecipientInfoStep({ initialData, updateData }: RecipientInfoStep
    ...initialData,
  });
 
+ const { isLoaded } = useLoadScript({
+   googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+   libraries: ['places'],
+ });
+
  useEffect(() => {
-   if (initialData) {
-     setFormState((prev) => ({
-       ...prev,
-       ...initialData,
-     }));
+   if (isLoaded && window.google) {
+     const addressInput = document.getElementById('street1');
+     if (addressInput) {
+       const autocomplete = new google.maps.places.Autocomplete(addressInput as HTMLInputElement, {
+         componentRestrictions: { country: 'us' },
+         fields: ['address_components'],
+         types: ['address'],
+       });
+
+       autocomplete.addListener('place_changed', () => {
+         const place = autocomplete.getPlace();
+         if (place.address_components) {
+           let streetNumber = '';
+           let route = '';
+           let newFormState = { ...formState };
+
+           place.address_components.forEach((component) => {
+             const type = component.types[0];
+             switch (type) {
+               case 'street_number':
+                 streetNumber = component.long_name;
+                 break;
+               case 'route':
+                 route = component.long_name;
+                 break;
+               case 'locality':
+                 newFormState.city = component.long_name;
+                 break;
+               case 'administrative_area_level_1':
+                 newFormState.state = component.short_name;
+                 break;
+               case 'postal_code':
+                 newFormState.zip = component.long_name;
+                 break;
+             }
+           });
+
+           newFormState.street1 = `${streetNumber} ${route}`.trim();
+           setFormState(newFormState);
+           updateData(newFormState);
+         }
+       });
+     }
    }
- }, [initialData]);
+ }, [isLoaded]);
 
  const handleChange = (field: string, value: string) => { // Changed from keyof FormState to string
    const newState = { ...formState, [field]: value };
