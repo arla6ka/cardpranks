@@ -26,7 +26,7 @@ const steps = [
 
 export const HowItWorksSection = () => {
    return (
-     <section className="mt-16 md:mt-20 w-full px-6 md:px-8">
+     <section className="mt-16 md:mt-20 w-full px-6 md:px-8 "  id="features">
        <motion.div
          initial={{ opacity: 0, y: 20 }}
          whileInView={{ opacity: 1, y: 0 }}
