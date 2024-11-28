@@ -97,7 +97,7 @@ export function RecipientInfoStep({ initialData, updateData }: RecipientInfoStep
          if (place.address_components) {
            let streetNumber = '';
            let route = '';
-           let newFormState = { ...formState };
+           const newFormState = { ...formState };
 
            place.address_components.forEach((component) => {
              const type = component.types[0];
@@ -127,7 +127,7 @@ export function RecipientInfoStep({ initialData, updateData }: RecipientInfoStep
        });
      }
    }
- }, [isLoaded]);
+ }, [isLoaded, formState, updateData]);
 
  const handleChange = (field: string, value: string) => { // Changed from keyof FormState to string
    const newState = { ...formState, [field]: value };

@@ -133,12 +133,10 @@ const StepContent = useMemo(() => {
   switch (currentStep) {
     case 0: // Design
       return (
-        // CreatePage.tsx
-<DesignStep
-  initialData={formData.card?._id}
-  updateData={(data) => updateFormSection('card', data)}
-  onNext={() => setCurrentStep(1)}
-/>
+        <DesignStep
+          initialData={formData.card?._id}
+          updateData={(data) => updateFormSection('card', data)}
+        />
       );
     case 1: // Handwriting
       return (

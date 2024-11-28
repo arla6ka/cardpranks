@@ -19,10 +19,9 @@ interface CardData {
 interface DesignStepProps {
   initialData?: string;
   updateData: (data: CardData) => void;
-  onNext: () => void; // Keep this prop since it's being passed from CreatePage
 }
 
-export function DesignStep({ initialData, updateData, onNext }: DesignStepProps) {
+export function DesignStep({ initialData, updateData }: DesignStepProps) {
   const [designs, setDesigns] = useState<Design[]>([]);
   const [selectedDesign, setSelectedDesign] = useState<string>(initialData || '');
   const [loading, setLoading] = useState(true);
