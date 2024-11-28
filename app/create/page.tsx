@@ -143,8 +143,6 @@ const StepContent = useMemo(() => {
         <HandwritingStep
           initialData={formData.handwriting?._id}
           updateData={(data) => updateFormSection('handwriting', { _id: data })}
-          onNext={() => setCurrentStep(2)}
-          onBack={() => setCurrentStep(0)}
         />
       );
     case 2: // Message
