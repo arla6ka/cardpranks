@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline';
+import { EnvelopeIcon} from '@heroicons/react/24/outline';
 import { CreatePostcardButton } from '../CreatePostcardButton';
 
 export const ContactSection = () => {
