@@ -33,19 +33,11 @@ export const ContactSection = () => {
             
             <div className="flex flex-col md:flex-row items-center gap-6 text-lg text-gray-400">
               <a 
-                href="mailto:name@email.com" 
+                href="mailto:hello@cardpranks.com" 
                 className="hover:text-black transition-colors flex items-center gap-2"
               >
                 <EnvelopeIcon className="w-5 h-5" />
-                name@email.com
-              </a>
-              <div className="hidden md:block w-1 h-1 bg-gray-700 rounded-full" />
-              <a 
-                href="tel:+17007007070" 
-                className="hover:text-black transition-colors flex items-center gap-2"
-              >
-                <PhoneIcon className="w-5 h-5" />
-                +1 (700) 700 - 7070
+                hello@cardpranks.com
               </a>
             </div>
 
