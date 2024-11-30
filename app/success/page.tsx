@@ -31,14 +31,14 @@ export default function SuccessPage() {
               },
               body: JSON.stringify({ sessionId }),
             });
-          } catch (err) {
-            console.error('Fulfillment error:', err);
+          } catch (error) {
+            console.error('Fulfillment error:', error);
           }
           setStatus('success');
         } else {
           setStatus('error');
         }
-      } catch (err) {
+      } catch (error) {
         setStatus('error');
       }
     };
@@ -98,7 +98,7 @@ export default function SuccessPage() {
             Thank You!
           </h1>
           <p className="text-xl text-gray-600">
-            We're excited to help you pull off an unforgettable prank.
+            We&apos;re excited to help you pull off an unforgettable prank.
           </p>
         </div>
 
@@ -118,8 +118,8 @@ export default function SuccessPage() {
             <ul className="space-y-3 text-gray-600 list-disc pl-5">
               <li><strong>Keep tabs on their mail:</strong> Discreetly monitor the mail around the delivery window to ensure they receive the card.</li>
               <li><strong>Be present:</strong> Try to be nearby when they open their mail. A casual visit or hangout can help you witness the moment firsthand.</li>
-              <li><strong>Surprise placement:</strong> Sneak the card into a spot they'll stumble upon—like their desk, bag, or even tucked into holiday décor.</li>
-              <li><strong>Prompt with curiosity:</strong> Ask if they've received any interesting holiday mail lately to steer them toward the card.</li>
+              <li><strong>Surprise placement:</strong> Sneak the card into a spot they&apos;ll stumble upon—like their desk, bag, or even tucked into holiday décor.</li>
+              <li><strong>Prompt with curiosity:</strong> Ask if they&apos;ve received any interesting holiday mail lately to steer them toward the card.</li>
             </ul>
           </div>
         </div>
@@ -133,19 +133,19 @@ export default function SuccessPage() {
             Confused families = hilarious TikToks and Reels!
           </p>
           <ol className="space-y-3 text-gray-600 list-decimal pl-5">
-            <li>Capture your recipient's reaction when they open their mystery CardPranks card.</li>
+            <li>Capture your recipient&apos;s reaction when they open their mystery CardPranks card.</li>
             <li>Share the video on TikTok or Instagram using #CardPranks and tag @CardPranks.</li>
-            <li>We'll feature our favorite reactions on our page!</li>
+            <li>We&apos;ll feature our favorite reactions on our page!</li>
           </ol>
           <p className="text-gray-600 text-center mt-6">
-            Make your family famous for their holiday confusion. We can't wait to see how prank-tastic your CardPranks moment is! 😂
+            Make your family famous for their holiday confusion. We can&apos;t wait to see how prank-tastic your CardPranks moment is! 😂
           </p>
         </div>
 
         {/* Footer Actions */}
         <div className="text-center space-y-6">
           <p className="text-gray-600">
-            The magic is all in the reveal! We'd love to hear how it goes—feel free to share your story with us.
+            The magic is all in the reveal! We&apos;d love to hear how it goes—feel free to share your story with us.
           </p>
           <div>
             <Link 
