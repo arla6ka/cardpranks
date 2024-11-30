@@ -32,7 +32,7 @@ export const HeroSection = () => {
           <span className="text-gray-500 line-through">$14.99</span>
           <span className="bg-red-100 text-red-600 text-sm px-3 py-1 rounded-full">Limited Time!</span>
         </p>
-        <p className="text-gray-600 text-base">Price goes up on November 30th</p>
+        <p className="text-gray-600 text-base">Price goes up on December 4th</p>
       </div>
       <div className="mt-6 md:mt-8" />
       <CreatePostcardButton 
