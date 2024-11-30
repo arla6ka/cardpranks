@@ -51,7 +51,7 @@ function EnvelopePreview({ formData }: { formData: FormData }) {
       </div>
 
       {/* Preview Container */}
-      <div className="relative w-full max-w-[589px] aspect-[1.8] mx-auto">
+      <div className="relative w-full max-w-[589px] aspect-[6/4] mx-auto">
         {/* Message Front */}
         <motion.div 
           initial={false}
@@ -86,7 +86,7 @@ function EnvelopePreview({ formData }: { formData: FormData }) {
               <img 
                 src={formData.card.preview_url}
                 alt={formData.card.name || "Card design"}
-                className="w-full h-full object-cover rounded-xl"
+                className="w-full h-full object-contain"
               />
             </div>
           )}
