@@ -31,14 +31,14 @@ export default function SuccessPage() {
               },
               body: JSON.stringify({ sessionId }),
             });
-          } catch (error) {
-            console.error('Fulfillment error:', error);
+          } catch {
+            console.error('Fulfillment attempt failed, webhook will handle it');
           }
           setStatus('success');
         } else {
           setStatus('error');
         }
-      } catch (error) {
+      } catch {
         setStatus('error');
       }
     };

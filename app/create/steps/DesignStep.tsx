@@ -45,12 +45,17 @@ export function DesignStep({ initialData, updateData }: DesignStepProps) {
   };
 
   const CHRISTMAS_DESIGNS = [
+    'Cherished Moments',
+    'Family First',
+    'Festive Family',
+    'Celebrating Kwanzaa',
     'Happy Holidays',
     'Merry Christmas',
     'Xmas',
     'Eco Holidays',
     'Holiday Season',
-    'Merry Christmas'
+    'Merry Christmas',
+    
   ];
 
   useEffect(() => {
