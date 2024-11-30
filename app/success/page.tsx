@@ -1,136 +1,169 @@
 // app/success/page.tsx
 'use client';
-import { Suspense } from 'react';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
-function SuccessContent() {
+export default function SuccessPage() {
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const payment_intent = searchParams.get('payment_intent');
-  const [status, setStatus] = useState<string>('loading');
+  const sessionId = searchParams.get('session_id');
 
   useEffect(() => {
-    if (!payment_intent) return;
+    if (!sessionId) {
+      setStatus('error');
+      return;
+    }
 
-    fetch(`/api/payment_status?payment_intent=${payment_intent}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 'succeeded') {
+    const checkStatus = async () => {
+      try {
+        const response = await fetch(`/api/payment_status?session_id=${sessionId}`);
+        const data = await response.json();
+        
+        if (data.payment_status === 'paid') {
+          try {
+            await fetch('/api/fulfill', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ sessionId }),
+            });
+          } catch (err) {
+            console.error('Fulfillment error:', err);
+          }
           setStatus('success');
         } else {
-          setStatus('failed');
+          setStatus('error');
         }
-      })
-      .catch(() => setStatus('failed'));
-  }, [payment_intent]);
+      } catch (err) {
+        setStatus('error');
+      }
+    };
 
-  const handleReturnHome = () => {
-    router.push('/');
-  };
+    checkStatus();
+  }, [sessionId]);
+
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-black mx-auto"></div>
+          <p className="mt-4 text-gray-600">Processing your payment...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'error') {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center px-6">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Something went wrong</h1>
+          <p className="text-gray-600 mb-6">Please try again or contact support if the problem persists.</p>
+          <Link 
+            href="/"
+            className="inline-block px-6 py-3 rounded-full text-white bg-black hover:bg-gray-800 transition-colors"
+          >
+            Return Home
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 py-12">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-md w-full mx-4 p-8 rounded-2xl bg-white shadow-xl border border-gray-100"
+        transition={{ duration: 0.5 }}
+        className="max-w-2xl mx-auto px-6"
       >
-        {status === 'loading' && (
-          <div className="text-center">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="inline-block"
-            >
-              <Loader2 className="w-16 h-16 text-black" />
-            </motion.div>
-            <h2 className="mt-6 text-2xl font-semibold text-gray-900">
-              Processing your payment...
-            </h2>
-            <p className="mt-2 text-gray-600">
-              Please wait while we confirm your order.
-            </p>
+        {/* Success Header */}
+        <div className="text-center mb-12">
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+            </svg>
           </div>
-        )}
+          <h1 className="text-4xl md:text-5xl font-['Almarena_Neue'] mb-4">
+            Thank You!
+          </h1>
+          <p className="text-xl text-gray-600">
+            We're excited to help you pull off an unforgettable prank.
+          </p>
+        </div>
 
-        {status === 'success' && (
-          <div className="text-center">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", duration: 0.5 }}
-            >
-              <CheckCircle className="w-16 h-16 mx-auto text-green-500" />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <h2 className="mt-6 text-3xl font-bold text-gray-900">
-                Thank You!
-              </h2>
-              <p className="mt-4 text-lg text-gray-600">
-                Your postcard has been ordered successfully.
-              </p>
-              <p className="mt-2 text-sm text-gray-500">
-                Well notify your recipient as soon as it&quot;s delivered.
-              </p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleReturnHome}
-                className="mt-8 px-8 py-3 rounded-full bg-black text-white font-['Consolas'] hover:bg-gray-800 transition-colors"
-              >
-                Return to Home
-              </motion.button>
-            </motion.div>
-          </div>
-        )}
+        {/* What Happens Next Section */}
+        <div className="bg-white rounded-2xl p-8 shadow-sm mb-8">
+          <h2 className="text-2xl font-['Almarena_Neue'] mb-4">What happens next?</h2>
+          <p className="text-gray-600 mb-4">
+            Your card will ship within 5-7 business days.
+          </p>
+        </div>
 
-        {status === 'failed' && (
-          <div className="text-center">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", duration: 0.5 }}
-            >
-              <XCircle className="w-16 h-16 mx-auto text-red-500" />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <h2 className="mt-6 text-3xl font-bold text-gray-900">
-                Oops! Something went wrong
-              </h2>
-              <p className="mt-4 text-gray-600">
-                We couldn&quot;t process your payment. Please try again.
-              </p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleReturnHome}
-                className="mt-8 px-8 py-3 rounded-full bg-black text-white font-['Consolas'] hover:bg-gray-800 transition-colors"
-              >
-                Return to Home
-              </motion.button>
-            </motion.div>
+        {/* Tips Section */}
+        <div className="bg-white rounded-2xl p-8 shadow-sm mb-8">
+          <h2 className="text-2xl font-['Almarena_Neue'] mb-6">Want the perfect reaction?</h2>
+          <div className="space-y-4">
+            <p className="text-gray-600 font-medium">Here are some tips to ensure maximum confusion and fun:</p>
+            <ul className="space-y-3 text-gray-600 list-disc pl-5">
+              <li><strong>Keep tabs on their mail:</strong> Discreetly monitor the mail around the delivery window to ensure they receive the card.</li>
+              <li><strong>Be present:</strong> Try to be nearby when they open their mail. A casual visit or hangout can help you witness the moment firsthand.</li>
+              <li><strong>Surprise placement:</strong> Sneak the card into a spot they'll stumble upon—like their desk, bag, or even tucked into holiday décor.</li>
+              <li><strong>Prompt with curiosity:</strong> Ask if they've received any interesting holiday mail lately to steer them toward the card.</li>
+            </ul>
           </div>
-        )}
+        </div>
+
+        {/* Social Media Section */}
+        <div className="bg-white rounded-2xl p-8 shadow-sm mb-8">
+          <h2 className="text-2xl font-['Almarena_Neue'] mb-4 flex items-center justify-center">
+            🎄 Get Featured by CardPranks! 🎄
+          </h2>
+          <p className="text-gray-600 text-center mb-6">
+            Confused families = hilarious TikToks and Reels!
+          </p>
+          <ol className="space-y-3 text-gray-600 list-decimal pl-5">
+            <li>Capture your recipient's reaction when they open their mystery CardPranks card.</li>
+            <li>Share the video on TikTok or Instagram using #CardPranks and tag @CardPranks.</li>
+            <li>We'll feature our favorite reactions on our page!</li>
+          </ol>
+          <p className="text-gray-600 text-center mt-6">
+            Make your family famous for their holiday confusion. We can't wait to see how prank-tastic your CardPranks moment is! 😂
+          </p>
+        </div>
+
+        {/* Footer Actions */}
+        <div className="text-center space-y-6">
+          <p className="text-gray-600">
+            The magic is all in the reveal! We'd love to hear how it goes—feel free to share your story with us.
+          </p>
+          <div>
+            <Link 
+              href="/"
+              className="inline-block px-8 py-3 rounded-full border border-black text-xl font-['Consolas'] bg-white hover:bg-gray-50 transition-colors"
+            >
+              Send Another Prank
+            </Link>
+          </div>
+          <div className="text-sm text-gray-500">
+            Questions? <a href="mailto:support@cardpranks.com" className="underline hover:text-gray-700">Contact our support</a>
+          </div>
+          <p className="text-gray-500 pt-4">
+            Happy Pranking!<br />
+            <span className="font-medium">The CardPranks Team</span>
+          </p>
+        </div>
       </motion.div>
     </div>
-  );
-}
-export default function SuccessPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <SuccessContent />
-    </Suspense>
   );
 }

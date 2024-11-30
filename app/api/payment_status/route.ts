@@ -8,20 +8,20 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const payment_intent = searchParams.get('payment_intent');
+  const session_id = searchParams.get('session_id');
 
-  if (!payment_intent) {
+  if (!session_id) {
     return NextResponse.json(
-      { error: 'Missing payment_intent parameter' },
+      { error: 'Missing session_id parameter' },
       { status: 400 }
     );
   }
 
   try {
-    const paymentIntent = await stripe.paymentIntents.retrieve(payment_intent);
-    return NextResponse.json(paymentIntent);
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+    return NextResponse.json(session);
   } catch (error) {
-    console.error('Error retrieving payment intent:', error);
+    console.error('Error retrieving session:', error);
     return NextResponse.json(
       { error: 'Failed to retrieve payment details' },
       { status: 500 }
