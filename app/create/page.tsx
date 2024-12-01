@@ -10,7 +10,6 @@ import { HandwritingStep } from './steps/HandwritingStep';
 import { MessageStep } from './steps/MessageStep';
 import { PaymentStep } from './steps/PaymentStep';
 import { useRouter } from 'next/navigation';
-import { GoogleTagManager } from '../components/GoogleTagManager';
 
 const INITIAL_FORM_DATA: FormData = {
   recipient: {
@@ -185,40 +184,37 @@ const StepContent = useMemo(() => {
 }, [currentStep, formData, handleSubmit]);
 
   return (
-    <>
-      <GoogleTagManager />
-      <main className="min-h-screen bg-white pb-32">
-        <div className="pt-10">{StepContent}</div>
+    <main className="min-h-screen bg-white pb-32">
+      <div className="pt-10">{StepContent}</div>
 
-        <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-t border-gray-200">
-          <div className="max-w-[1170px] mx-auto px-6">
-            <div className="flex justify-between items-center h-16">
-              {currentStep > 0 && (
-                <button
-                  onClick={() => goToStep(currentStep - 1)}
-                  className="text-gray-600 hover:text-black transition-colors flex items-center gap-2"
-                >
-                  <span className="text-lg">←</span>
-                  Back
-                </button>
-              )}
-              <div className="flex-1" />
-              {currentStep < 5 && (
-                <button
-                  onClick={() => goToStep(currentStep + 1)}
-                  disabled={!isStepValid(currentStep)}
-                  className="px-6 py-2 bg-black text-white rounded-full flex items-center gap-2 
+      <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-t border-gray-200">
+        <div className="max-w-[1170px] mx-auto px-6">
+          <div className="flex justify-between items-center h-16">
+            {currentStep > 0 && (
+              <button
+                onClick={() => goToStep(currentStep - 1)}
+                className="text-gray-600 hover:text-black transition-colors flex items-center gap-2"
+              >
+                <span className="text-lg">←</span>
+                Back
+              </button>
+            )}
+            <div className="flex-1" />
+            {currentStep < 5 && (
+              <button
+                onClick={() => goToStep(currentStep + 1)}
+                disabled={!isStepValid(currentStep)}
+                className="px-6 py-2 bg-black text-white rounded-full flex items-center gap-2 
                             disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 
                             transition-colors font-medium"
-                >
-                  {currentStep === 4 ? 'Proceed to Payment' : 'Next'}
-                  <span className="text-lg">→</span>
-                </button>
-              )}
-            </div>
+              >
+                {currentStep === 4 ? 'Proceed to Payment' : 'Next'}
+                <span className="text-lg">→</span>
+              </button>
+            )}
           </div>
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 }

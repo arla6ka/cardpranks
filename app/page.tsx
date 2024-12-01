@@ -11,12 +11,10 @@ import { DiscountPopup } from './components/DiscountPopup';
 import { InfiniteTestimonials } from './components/SocialProof';
 import { HandwritingExplainer } from './components/sections/HandwritingExplainer';
 import { Analytics } from "@vercel/analytics/react"
-import { GoogleTagManager } from './components/GoogleTagManager';
 
 export default function PrankCardsPage() {
   return (
     <>
-      <GoogleTagManager />
       <main className="flex overflow-hidden flex-col pt-6 bg-white font-['Consolas']">
         <Header/>
         <div className="flex flex-col items-center px-6">
