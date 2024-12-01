@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import './globals.css'
 import { consolas, almarenaNeue } from './fonts'
+import { GoogleTagManager } from './components/GoogleTagManager';
 
 export const metadata: Metadata = {
   title: "CardPranks - Anonymous Christmas Cards",
@@ -39,6 +40,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${consolas.variable} ${almarenaNeue.variable}`}>
+      <head>
+        <GoogleTagManager />
+      </head>
       <body>{children}</body>
     </html>
   );

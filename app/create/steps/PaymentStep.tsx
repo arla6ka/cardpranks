@@ -167,6 +167,18 @@ export function PaymentStep({ formData }: PaymentStepProps) {
   const handleCheckout = async () => {
     setIsLoading(true);
     try {
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'begin_checkout', {
+          currency: 'USD',
+          value: 8.98,
+          items: [{
+            item_name: 'Prank Card',
+            price: 8.98,
+            quantity: 1
+          }]
+        });
+      }
+
       const response = await fetch('/api/checkout_sessions', {
         method: 'POST',
         headers: {
