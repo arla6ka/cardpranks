@@ -56,7 +56,7 @@ export const PricingSection = () => {
                className="flex items-center justify-center gap-3"
              >
                <Clock className="w-5 h-5 text-gray-700" />
-               <p className="text-lg">Delivered in 1-3 Business Days</p>
+               <p className="text-lg">Delivered in Less Than 1 Week</p>
              </motion.div>
 
              <motion.div 

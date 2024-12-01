@@ -73,7 +73,7 @@ export const DiscountPopup = () => {
                 Last chance to order at this price
               </p>
               <p className="text-sm text-red-600 mb-4">
-                Offer ends November 30th
+                Offer ends December 4th
               </p>
               <motion.button
                 whileHover={{ scale: 1.05 }}
