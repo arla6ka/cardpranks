@@ -5,7 +5,7 @@ import { CreatePostcardButton } from '../CreatePostcardButton';
 const faqItems: FAQItemProps[] = [
   {
     question: "How quickly do you send out my cards?",
-    answer: "Fast! Cards are typically mailed within 1 business day and delivered over the following 1-3 days."
+    answer: "Fast! Cards are typically delivered in less than 1 week."
   }, 
   {
     question: "How much does it cost?",
