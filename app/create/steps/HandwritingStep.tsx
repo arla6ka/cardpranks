@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
 import { HANDWRITINGS } from '@/app/lib/constants/handwritings';
+import Image from 'next/image';
 
 interface HandwritingStepProps {
   initialData?: string;
@@ -39,13 +40,15 @@ export function HandwritingStep({ initialData, updateData, onComplete }: Handwri
         </h1>
 
         <div className="relative w-full md:w-[400px] mx-auto aspect-video mb-8 rounded-2xl overflow-hidden bg-gray-50">
-          <img
+          <Image
             src="/handwriting.gif"
             alt="Robot handwriting demonstration"
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
             }}
+            priority
           />
         </div>
 
@@ -97,10 +100,14 @@ export function HandwritingStep({ initialData, updateData, onComplete }: Handwri
           >
             <h3 className="text-xl font-medium mb-4">{style.name}</h3>
             <div className="relative rounded-xl overflow-hidden bg-white">
-              <img
+              <Image
                 src={style.preview_url}
                 alt={`Handwriting style by ${style.name}`}
-                className="w-full aspect-[2.12] object-contain transition-transform duration-300 group-hover:scale-105"
+                width={600}
+                height={283}
+                className="w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                loading={index > 5 ? "lazy" : "eager"}
+                quality={75}
               />
             </div>
             {selectedStyle === style._id && (

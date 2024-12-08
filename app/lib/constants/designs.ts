@@ -273,5 +273,25 @@ export const DESIGNS = [
     "_id": "674a69f60631d2001472327e",
     "name": "Cherished Moments",
     "preview_url": "http://res.cloudinary.com/handwrite/image/upload/v1732930033/cards/lqn1qtz3uuiyf3o7zafe.png"
+  },
+  {
+    "_id": "67551f267333f10014a3ff33",
+    "name": "Wilson Family",
+    "preview_url": "http://res.cloudinary.com/handwrite/image/upload/v1733631778/cards/cig5ppnlaminpuroahek.png"
+  },
+  {
+    "_id": "675524697333f10014a40025",
+    "name": "Christmas Bows",
+    "preview_url": "http://res.cloudinary.com/handwrite/image/upload/v1733633100/cards/hfaw72lqzo6dw2he0nfd.png"
+  },
+  {
+    "_id": "675528d97333f10014a40026",
+    "name": "Santa Baby",
+    "preview_url": "http://res.cloudinary.com/handwrite/image/upload/v1733634257/cards/vpbil1sqol6a7wcs7wbh.png"
+  },
+  {
+    "_id": "6755f18a7333f10014a40d5c",
+    "name": "Woofy Holidays",
+    "preview_url": "http://res.cloudinary.com/handwrite/image/upload/v1733685556/cards/fhlaqp6ai7ubiwsyp2ay.png"
   }
 ]
