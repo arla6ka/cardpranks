@@ -41,6 +41,13 @@ function SuccessContent() {
               });
             }
 
+            if (typeof window !== 'undefined' && (window as any).fbq) {
+              (window as any).fbq('track', 'Purchase', {
+                value: 8.98,
+                currency: 'USD',
+              });
+            }
+
           } catch {
             console.error('Fulfillment attempt failed, webhook will handle it');
           }
