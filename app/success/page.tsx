@@ -120,6 +120,9 @@ function SuccessContent() {
           </p>
         </div>
 
+        {/* Survey Section */}
+        <SourceSurvey />
+
         {/* Tips Section */}
         <div className="bg-white rounded-2xl p-8 shadow-sm mb-8">
           <h2 className="text-2xl font-['Almarena_Neue'] mb-6">Want the perfect reaction?</h2>
@@ -152,6 +155,9 @@ function SuccessContent() {
           </p>
         </div>
 
+        {/* Add the survey before the footer actions */}
+        <SourceSurvey />
+
         {/* Footer Actions */}
         <div className="text-center space-y-6">
           <p className="text-gray-600">
@@ -174,6 +180,71 @@ function SuccessContent() {
           </p>
         </div>
       </motion.div>
+    </div>
+  );
+}
+
+function SourceSurvey() {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const sources = [
+    { id: 'instagram', label: 'Instagram', icon: '📸' },
+    { id: 'tiktok', label: 'TikTok', icon: '🎵' },
+    { id: 'google', label: 'Google Search', icon: '🔍' },
+    { id: 'youtube', label: 'YouTube', icon: '▶️' },
+    { id: 'facebook', label: 'Facebook', icon: '👥' },
+    { id: 'other', label: 'Other', icon: '✨' },
+  ];
+
+  const handleSubmit = async (source: string) => {
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/survey', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ source }),
+      });
+
+      if (!response.ok) throw new Error('Failed to submit');
+      
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error('Survey submission error:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (isSubmitted) {
+    return (
+      <div className="bg-white rounded-2xl p-8 shadow-sm mb-8 text-center">
+        <h2 className="text-2xl font-['Almarena_Neue'] mb-4">Thanks for letting us know! 🙏</h2>
+        <p className="text-gray-600">Your feedback helps us reach more pranksters like you!</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-2xl p-8 shadow-sm mb-8">
+      <h2 className="text-2xl font-['Almarena_Neue'] mb-6 text-center">
+        How did you hear about us? 🤔
+      </h2>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {sources.map((source) => (
+          <button
+            key={source.id}
+            onClick={() => handleSubmit(source.id)}
+            disabled={isSubmitting}
+            className="p-4 rounded-xl border-2 border-gray-200 hover:border-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <div className="text-2xl mb-2">{source.icon}</div>
+            <div className="font-medium">{source.label}</div>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
