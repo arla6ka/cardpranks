@@ -123,7 +123,7 @@ export default function CreatePage() {
       return;
     }
 
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo(0, 0);
     setCurrentStep(step);
   };
 
@@ -136,7 +136,10 @@ const StepContent = useMemo(() => {
         <DesignStep
           initialData={formData.card?._id}
           updateData={(data) => updateFormSection('card', data)}
-          onComplete={() => setCurrentStep(1)}
+          onComplete={() => {
+            window.scrollTo(0, 0);
+            setCurrentStep(1);
+          }}
         />
       );
     case 1: // Handwriting
@@ -144,7 +147,10 @@ const StepContent = useMemo(() => {
         <HandwritingStep
           initialData={formData.handwriting?._id}
           updateData={(data) => updateFormSection('handwriting', { _id: data })}
-          onComplete={() => setCurrentStep(2)}
+          onComplete={() => {
+            window.scrollTo(0, 0);
+            setCurrentStep(2);
+          }}
         />
       );
     case 2: // Message
