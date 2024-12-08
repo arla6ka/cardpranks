@@ -194,15 +194,9 @@ export function PaymentStep({ formData }: PaymentStepProps) {
       <h1 className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-4 text-center">
         Review Your Order
       </h1>
-      <div className="flex items-center gap-1 text-gray-600 text-lg mb-10 mr-[-30px] md:mr-[0px]">
-        <span>Secure payment powered by</span>
-        <div className="flex items-center gap-0">
-          <img 
-            src="/stripe.png" 
-            alt="Stripe" 
-            className="h-[100px] w-[80px] object-contain"
-          />
-        </div>
+      <div className="flex items-center gap-1 text-gray-600 text-lg mb-10 m">
+        <span>Secure payment powered by <b>Stripe</b></span>
+        
       </div>
       <EnvelopePreview formData={formData} />
       <div className="w-full max-w-[589px] mt-6">

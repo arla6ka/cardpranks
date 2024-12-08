@@ -60,6 +60,7 @@ export const HowItWorksSection = () => {
            </p>
          </div>
          <CreatePostcardButton text="Start Your Prank Postcard Now" />
+         
        </motion.div>
      </section>
    );

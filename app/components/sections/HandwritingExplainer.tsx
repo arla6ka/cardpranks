@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { CreatePostcardButton } from "../CreatePostcardButton";
 
 export const HandwritingExplainer = () => {
     return (
@@ -70,10 +71,18 @@ export const HandwritingExplainer = () => {
                   and personal while maintaining perfect legibility.
                 </p>
               </div>
+              <div className="mt-6 md:mt-8" />
+      <CreatePostcardButton 
+        text="Create Your Prank Postcard Now"
+        iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/08981e05ef22ce5015ae38ba835405218cbc428a2595a55bfae49d399dca3c1a"
+      />
             </motion.div>
           </div>
+          
         </div>
+        
       </section>
+      
     );
    };
    

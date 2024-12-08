@@ -7,6 +7,7 @@ import { HANDWRITINGS } from '@/app/lib/constants/handwritings';
 interface HandwritingStepProps {
   initialData?: string;
   updateData: (data: string) => void;
+  onComplete?: () => void;
 }
 
 interface HandwritingStyle {
@@ -15,12 +16,15 @@ interface HandwritingStyle {
   preview_url: string;
 }
 
-export function HandwritingStep({ initialData, updateData }: HandwritingStepProps) {
+export function HandwritingStep({ initialData, updateData, onComplete }: HandwritingStepProps) {
   const [selectedStyle, setSelectedStyle] = useState<string>(initialData || '');
 
   const handleSelect = (style: HandwritingStyle) => {
     setSelectedStyle(style._id);
     updateData(style._id);
+    if (onComplete) {
+      onComplete();
+    }
   };
 
   return (
@@ -31,19 +35,19 @@ export function HandwritingStep({ initialData, updateData }: HandwritingStepProp
         className="text-center mb-16 max-w-3xl"
       >
         <h1 className="font-['Almarena_Neue'] text-4xl md:text-6xl mb-6">
-          Choose Your Handwriting Style
+          Choose Your Handwriting
         </h1>
 
-        <div className="relative w-full aspect-video mb-8 rounded-2xl overflow-hidden bg-gray-50">
-  <img
-    src="/handwriting.gif"
-    alt="Robot handwriting demonstration"
-    className="w-full h-full object-cover"
-    onError={(e) => {
-      e.currentTarget.style.display = 'none';
-    }}
-  />
-</div>
+        <div className="relative w-full md:w-[400px] mx-auto aspect-video mb-8 rounded-2xl overflow-hidden bg-gray-50">
+          <img
+            src="/handwriting.gif"
+            alt="Robot handwriting demonstration"
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        </div>
 
         <div className="flex items-center justify-center gap-8 text-gray-700">
           <motion.div 

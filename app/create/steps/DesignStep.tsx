@@ -21,6 +21,7 @@ interface CardData {
 interface DesignStepProps {
   initialData?: string;
   updateData: (data: CardData) => void;
+  onComplete?: () => void;
 }
 
 interface DesignFromAPI {
@@ -29,7 +30,7 @@ interface DesignFromAPI {
   preview_url: string;
 }
 
-export function DesignStep({ initialData, updateData }: DesignStepProps) {
+export function DesignStep({ initialData, updateData, onComplete }: DesignStepProps) {
   const [designs, setDesigns] = useState<Design[]>([]);
   const [selectedDesign, setSelectedDesign] = useState<string>(initialData || '');
   const [loading, setLoading] = useState(true);
@@ -42,6 +43,9 @@ export function DesignStep({ initialData, updateData }: DesignStepProps) {
       preview_url: design.preview_url,
       name: design.name
     });
+    if (onComplete) {
+      onComplete();
+    }
   };
 
   const PRIORITY_DESIGNS = [
