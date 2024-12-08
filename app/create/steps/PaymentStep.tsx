@@ -167,6 +167,11 @@ export function PaymentStep({ formData }: PaymentStepProps) {
   const handleCheckout = async () => {
     setIsLoading(true);
     try {
+      // Track AddPaymentInfo event when proceeding to Stripe
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'AddPaymentInfo');
+      }
+
       const response = await fetch('/api/checkout_sessions', {
         method: 'POST',
         headers: {

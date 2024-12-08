@@ -12,6 +12,15 @@ function SuccessContent() {
   const sessionId = searchParams.get('session_id');
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Purchase', {
+        value: 8.98,
+        currency: 'USD'
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     if (!sessionId) {
       setStatus('error');
       return;
@@ -44,7 +53,7 @@ function SuccessContent() {
             if (typeof window !== 'undefined' && (window as any).fbq) {
               (window as any).fbq('track', 'Purchase', {
                 value: 8.98,
-                currency: 'USD',
+                currency: 'USD'
               });
             }
 

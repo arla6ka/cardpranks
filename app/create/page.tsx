@@ -41,6 +41,12 @@ export default function CreatePage() {
     localStorage.setItem('postcardForm', JSON.stringify(formData));
   }, [formData]);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'InitiateCheckout');
+    }
+  }, []);
+
   const isStepValid = (step: number): boolean => {
     switch (step) {
       case 0: // Design
