@@ -1,13 +1,11 @@
 'use client'
 import { HeroSection } from './components/sections/HeroSection';
-import { FamilyPranksSection } from './components/sections/FamilyPranksSection';
 import { HowItWorksSection } from './components/sections/HowItWorksSection';
 import { PricingSection } from './components/sections/PricingSection';
 import { FAQSection } from './components/sections/FAQSection';
 import { ContactSection } from './components/sections/ContactSection';
 import { motion } from 'framer-motion';
 import { Header } from './components/Header';
-import { DiscountPopup } from './components/DiscountPopup';
 import { InfiniteTestimonials } from './components/SocialProof';
 import { HandwritingExplainer } from './components/sections/HandwritingExplainer';
 import { Analytics } from "@vercel/analytics/react"
@@ -24,8 +22,6 @@ export default function PrankCardsPage() {
           <HandwritingExplainer />
           <HowItWorksSection />
           <PricingSection />
-          <FamilyPranksSection 
-          />
           <FAQSection />
           <ContactSection />
           <div className="relative w-screen -ml-[50vw] -mr-[50vw]">

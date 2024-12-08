@@ -44,6 +44,13 @@ export function DesignStep({ initialData, updateData }: DesignStepProps) {
     });
   };
 
+  const PRIORITY_DESIGNS = [
+    'Cherished Moments',
+    'Family First',
+    'Festive Family',
+    'Celebrating Kwanzaa',
+  ];
+
   const CHRISTMAS_DESIGNS = [
     'Cherished Moments',
     'Family First',
@@ -55,7 +62,6 @@ export function DesignStep({ initialData, updateData }: DesignStepProps) {
     'Eco Holidays',
     'Holiday Season',
     'Merry Christmas',
-    
   ];
 
   useEffect(() => {
@@ -95,7 +101,16 @@ export function DesignStep({ initialData, updateData }: DesignStepProps) {
     );
   }
 
-  const christmasDesigns = designs.filter(design => design.category === 'christmas');
+  const christmasDesigns = designs
+    .filter(design => design.category === 'christmas')
+    .sort((a, b) => {
+      const aIndex = PRIORITY_DESIGNS.indexOf(a.name);
+      const bIndex = PRIORITY_DESIGNS.indexOf(b.name);
+      if (aIndex === -1 && bIndex === -1) return 0;
+      if (aIndex === -1) return 1;
+      if (bIndex === -1) return -1;
+      return aIndex - bIndex;
+    });
   const otherDesigns = designs.filter(design => design.category === 'other');
 
   return (
