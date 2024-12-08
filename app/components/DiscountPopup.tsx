@@ -76,7 +76,7 @@ export const DiscountPopup = () => {
                 Offer ends December 4th
               </p>
               <motion.button
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05 }}  
                 whileTap={{ scale: 0.95 }}
                 onClick={handleOrderClick}
                 className="w-full bg-black text-white py-3 px-6 rounded-full font-['Consolas'] hover:bg-gray-800 transition-colors"

@@ -21,7 +21,6 @@ export default function PrankCardsPage() {
           <Analytics />
           <HeroSection />
           <InfiniteTestimonials />
-          <DiscountPopup />
           <HandwritingExplainer />
           <HowItWorksSection />
           <PricingSection />
