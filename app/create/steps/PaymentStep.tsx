@@ -196,14 +196,14 @@ export function PaymentStep({ formData }: PaymentStepProps) {
       </h1>
       <div className="flex items-center gap-1 text-gray-600 text-lg mb-10 m">
         <span>Secure payment powered by <b>Stripe</b></span>
-        
       </div>
       <EnvelopePreview formData={formData} />
       <div className="w-full max-w-[589px] mt-6">
         <button
+          id="checkout-button"
           onClick={handleCheckout}
           disabled={isLoading}
-          className="w-full px-8 py-3 rounded-full border border-black text-xl font-['Consolas'] bg-white hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="hidden"
         >
           {isLoading ? 'Loading...' : 'Proceed to Payment'}
         </button>

@@ -210,7 +210,17 @@ const StepContent = useMemo(() => {
                             disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 
                             transition-colors font-medium"
               >
-                {currentStep === 4 ? 'Proceed to Payment' : 'Next'}
+                {currentStep === 4 ? 'Proceed to Preview' : 'Next'}
+                <span className="text-lg">→</span>
+              </button>
+            )}
+            {currentStep === 5 && (
+              <button
+                onClick={() => document.getElementById('checkout-button')?.click()}
+                className="px-6 py-2 bg-black text-white rounded-full flex items-center gap-2 
+                          hover:bg-gray-800 transition-colors font-medium"
+              >
+                Proceed to Payment
                 <span className="text-lg">→</span>
               </button>
             )}
