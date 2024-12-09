@@ -2,52 +2,71 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { headers } from 'next/headers';
-import { fulfillCheckout } from '../../lib/fulfillment';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-11-20.acacia',
 });
 
+// This is your Stripe webhook secret for testing your endpoint locally
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: Request) {
-  const payload = await req.text();
-  const headersList = await headers();
-  const sig = headersList.get('stripe-signature') || '';
-
-  console.log('Received webhook');
+  const body = await req.text();
+  const sig = headers().get('stripe-signature');
 
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
-    console.log('Webhook event type:', event.type);
-  } catch (err) {
-    console.error('Webhook signature verification failed:', err);
-    return NextResponse.json({ error: 'Webhook Error' }, { status: 400 });
+    if (!sig || !endpointSecret) {
+      return NextResponse.json(
+        { error: 'Missing stripe signature or endpoint secret' },
+        { status: 400 }
+      );
+    }
+
+    event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
+  } catch (err: any) {
+    console.error('Webhook signature verification failed:', err.message);
+    return NextResponse.json(
+      { error: `Webhook Error: ${err.message}` },
+      { status: 400 }
+    );
   }
 
   try {
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object as Stripe.Checkout.Session;
-      console.log('Processing completed session:', session.id);
+    // Handle the event
+    switch (event.type) {
+      case 'payment_intent.succeeded':
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+        console.log('Payment succeeded:', paymentIntent.id);
+        // Add your business logic here
+        break;
+        
+      case 'checkout.session.completed':
+        const checkoutSession = event.data.object as Stripe.Checkout.Session;
+        console.log('Checkout completed:', checkoutSession.id);
+        // Add your business logic here
+        break;
 
-      // Check if payment is successful
-      if (session.payment_status === 'paid') {
-        await fulfillCheckout(session);
-        return NextResponse.json({ success: true });
-      } else {
-        console.log('Session not paid yet:', session.payment_status);
-        return NextResponse.json({ status: 'pending' });
-      }
+      // Add other event types as needed
+      default:
+        console.log(`Unhandled event type ${event.type}`);
     }
 
-    return NextResponse.json({ received: true });
-  } catch (error) {
-    console.error('Error processing webhook:', error);
+    // Return a 200 response to acknowledge receipt of the event
+    return NextResponse.json({ received: true }, { status: 200 });
+  } catch (err) {
+    console.error('Error processing webhook:', err);
     return NextResponse.json(
-      { error: 'Webhook processing failed' },
+      { error: 'Webhook handler failed' },
       { status: 500 }
     );
   }
 }
+
+// Needed for Stripe webhook signature verification
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
