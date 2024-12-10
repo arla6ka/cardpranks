@@ -2,12 +2,12 @@
 
 import posthog from 'posthog-js';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY!;
 const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST!;
 
-export function PostHogAnalytics() {
+function PostHogAnalyticsContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -35,4 +35,12 @@ export function PostHogAnalytics() {
   }, [pathname, searchParams]);
 
   return null;
+}
+
+export function PostHogAnalytics() {
+  return (
+    <Suspense fallback={null}>
+      <PostHogAnalyticsContent />
+    </Suspense>
+  );
 } 
