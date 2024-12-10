@@ -3,6 +3,7 @@ import './globals.css'
 import { consolas, almarenaNeue } from './fonts'
 import { GoogleTagManager } from './components/GoogleTagManager';
 import { MetaPixel } from './components/MetaPixel';
+import { PostHogAnalytics } from './components/PostHogAnalytics';
 
 export const metadata: Metadata = {
   title: "CardPranks - Anonymous Christmas Cards",
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en" className={`${consolas.variable} ${almarenaNeue.variable}`}>
@@ -46,6 +47,7 @@ export default function RootLayout({
         <MetaPixel />
       </head>
       <body>{children}</body>
+      <PostHogAnalytics />
     </html>
   );
 }
