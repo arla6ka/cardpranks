@@ -186,7 +186,7 @@ function SuccessContent() {
             </Link>
           </div>
           <div className="text-sm text-gray-500">
-            Questions? <a href="mailto:support@cardpranks.com" className="underline hover:text-gray-700">Contact our support</a>
+            Questions? <a href="mailto:hello@cardpranks.com" className="underline hover:text-gray-700">Contact our support</a>
           </div>
           <p className="text-gray-500 pt-4">
             Happy Pranking!<br />
