@@ -171,8 +171,6 @@ function SuccessContent() {
           </p>
         </div>
 
-        {/* Add the survey before the footer actions */}
-        <SourceSurvey />
 
         {/* Footer Actions */}
         <div className="text-center space-y-6">
