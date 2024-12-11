@@ -9,7 +9,7 @@ const faqItems: FAQItemProps[] = [
   }, 
   {
     question: "How much does it cost?",
-    answer: "Our cards are just $8.98 including postage. For bulk orders, please contact us."
+    answer: "Our cards are just $4.99 including postage. For bulk orders, please contact us."
   },
   {
     question: "What kind of stationery do you use?",
