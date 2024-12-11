@@ -28,8 +28,8 @@ export const HeroSection = () => {
       </h1>
       <div className="mt-3 md:mt-4 text-xl md:text-2xl leading-tight text-center px-4 md:px-0 space-y-2">
         <p className="flex items-center justify-center gap-3">
-          <span className="text-3xl font-bold">$8.98</span>
-          <span className="text-gray-500 line-through">$14.99</span>
+          <span className="text-3xl font-bold">$4.99</span>
+          <span className="text-gray-500 line-through">$9.99</span>
           <span className="bg-red-100 text-red-600 text-sm px-3 py-1 rounded-full">Limited Time!</span>
         </p>
       </div>
